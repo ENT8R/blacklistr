@@ -43,6 +43,7 @@ function init() {
   }
   if (mode == 1 || mode == 'whitelist' || mode == 'white') {
     $('#mode').prop('checked', true);
+    updateMap(jsyaml.safeLoad($('#countries').val()));
   }
 
   if (data || file) {
