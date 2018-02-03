@@ -29,14 +29,26 @@
     <div id="map" class="col s8"></div>
 
     <div class="col s4">
-      <div class="switch">
-        <label>
-          Blacklist mode
-          <input type="checkbox" id="mode">
-          <span class="lever"></span>
-          Whitelist mode
-        </label>
-      </div><br>
+      <br>
+      <div class="row">
+        <div class="switch col s6">
+          <label>
+            Blacklist
+            <input type="checkbox" id="mode">
+            <span class="lever"></span>
+            Whitelist
+          </label>
+        </div>
+        <div class="switch col s6">
+          <label>
+            Show borders
+            <input type="checkbox" id="borders">
+            <span class="lever"></span>
+            Hide borders
+          </label>
+        </div>
+      </div>
+      <br>
 
       <div class="divider"></div><br>
 
@@ -45,7 +57,14 @@
         <label for="countries">Countries</label>
       </div>
 
+      <div class="input-field">
+        <textarea id="disabled" class="materialize-textarea" placeholder="Input all ISO-3166 country codes seperated by a space, comma or line break"></textarea>
+        <label for="disabled">Disabled by default</label>
+      </div>
+
       <a class="waves-effect waves-light btn"><i class="material-icons left">map</i>Show on map</a>
+
+      <div id="images"></div>
     </div>
 
   </div>
@@ -53,6 +72,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-image@0.4.0/leaflet-image.js"></script>
 
   <script src="assets/countries.js"></script>
   <script src="js/js-yaml.min.js"></script>
