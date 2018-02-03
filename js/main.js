@@ -33,12 +33,16 @@ function init() {
 
   const data = url.searchParams.get('data');
   const file = url.searchParams.get('file');
+  const mode = url.searchParams.get('mode');
 
   if (data) $('#countries').val(data); updateMap(jsyaml.safeLoad($('#countries').val()));
   if (file) {
     request(file, function(value) {
       $('#countries').val(value); updateMap(jsyaml.safeLoad($('#countries').val()));
     });
+  }
+  if (mode == 1 || mode == 'whitelist' || mode == 'white') {
+    $('#mode').prop('checked', true);
   }
 
   if (data || file) {
@@ -114,7 +118,7 @@ function getStyle(which) {
       weight: 0.4
     }
   }
-  if ($('#mode').is(":checked")) {
+  if ($('#mode').is(':checked')) {
     return which ? style.green : style.red;
   } else {
     return which ? style.red : style.green;
