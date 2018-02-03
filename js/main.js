@@ -7,7 +7,7 @@ $(document).ready(function() {
     updateMap(jsyaml.safeLoad($('#countries').val()));
   });
 
-  updateMap();
+  if (!$('#countries').val()) updateMap();
 });
 
 const http = new XMLHttpRequest();
@@ -24,6 +24,30 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 22,
   attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
+
+init();
+
+//Get the URL params and use them to e.g. show the data on the map
+function init() {
+  const url = new URL(window.location.href);
+
+  const data = url.searchParams.get('data');
+  const file = url.searchParams.get('file');
+
+  if (data) $('#countries').val(data); updateMap(jsyaml.safeLoad($('#countries').val()));
+  if (file) {
+    request(file, function(value) {
+      $('#countries').val(value); updateMap(jsyaml.safeLoad($('#countries').val()));
+    });
+  }
+
+  if (data || file) {
+    const uri = window.location.toString();
+    if (uri.indexOf('?') > 0) {
+      window.history.replaceState({}, document.title, uri.substring(0, uri.indexOf('?')));
+    }
+  }
+}
 
 function updateMap(countries) {
   if (geoJSONLayer) map.removeLayer(geoJSONLayer);
@@ -43,24 +67,22 @@ function updateMap(countries) {
       return getCountryCode(feature.properties.tags) != null && !bringToBack.includes(getCountryCode(feature.properties.tags));
     },
     onEachFeature: function(feature, layer) {
-      if (bringToBack.includes(getCountryCode(feature.properties.tags))) {
+      //TODO: Bring this to work
+      /*if (bringToBack.includes(getCountryCode(feature.properties.tags))) {
         layer.bringToBack();
         layer.remove();
-        //return;
-      }
+        return;
+      }*/
       layer.on({
         click: function(e) {
-          console.log(e);
           const countryCode = getCountryCode(e.target.feature.properties.tags);
           const countries = countriesToArray($('#countries').val());
-          console.log(countries);
           const index = countries.indexOf(countryCode);
           if (index > -1) {
             countries.splice(index, 1);
           } else {
             countries.push(countryCode);
           }
-          console.log(countries.toString());
           $('#countries').val(countries.toString());
           Materialize.updateTextFields();
           updateMap(jsyaml.safeLoad(countries.toString()));
@@ -68,6 +90,16 @@ function updateMap(countries) {
       });
     }
   }).addTo(map);
+}
+
+function request(url, callback) {
+  http.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      callback(http.responseText);
+    }
+  };
+  http.open('GET', url, true);
+  http.send();
 }
 
 function getStyle(which) {
