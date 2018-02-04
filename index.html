@@ -11,30 +11,43 @@
   <title>blacklistr</title>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="css/materialize-0.100.2.min.css">
+  <link rel="stylesheet" href="css/codemirror.css">
+  <link rel="stylesheet" href="css/codemirror-material.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css">
 
   <link rel="shortcut icon" type="image/x-icon" href="assets/icon.png">
 
   <style>
-    #map {
+    #map, .CodeMirror, .CodeMirror-scroll {
       height: 100vh;
     }
   </style>
 </head>
 
 <body>
-  <div id="map"></div>
-  <div class="input-field hide">
-    <textarea id="countries" class="materialize-textarea"></textarea>
+
+  <div class="row" style="margin-bottom: 0px">
+
+    <div id="map" class="col s8"></div>
+
+    <div id="side">
+      <div id="countries"></div>
+      <div id="images"></div>
+    </div>
+
   </div>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-image@0.4.0/leaflet-image.js"></script>
+
+  <script src="js/codemirror.js"></script>
+  <script src="js/mode/yaml.js"></script>
 
   <script src="assets/countries.js"></script>
+  <script src="assets/codes.js"></script>
 
-  <script src="js/shared.js"></script>
   <script src="js/main.js"></script>
 
 </body>
