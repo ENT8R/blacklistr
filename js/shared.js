@@ -56,16 +56,16 @@ function updateMap() {
           return getStyle('green');
         }
       } else {
-        if (mode == modes.whitelist) {
-          return getStyle('red');
-        } else {
+        if (mode == modes.blacklist) {
           return getStyle('green');
+        } else {
+          return getStyle('red');
         }
       }
     },
     filter: function(feature) {
       const countryCode = getCountryCode(feature.properties.tags);
-      return countryCode != null && !bringToBack.includes(countryCode);
+      return countryCode != null && countries.includes(countryCode);
     },
     onEachFeature: function(feature, layer) {
       const countryCode = getCountryCode(feature.properties.tags);
@@ -92,7 +92,8 @@ function getStyle(color) {
     },
     green: {
       fillColor: '#2e7d32',
-      weight: 0.4
+      weight: 1.2,
+      fillOpacity: 0.8
     }
   }
   return style[color];

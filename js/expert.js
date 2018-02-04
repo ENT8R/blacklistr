@@ -52,7 +52,7 @@ const screenshotButton = L.Control.extend({
       leafletImage(map, function(err, canvas) {
         const a = document.createElement('a');
         a.href = canvas.toDataURL();
-        a.download = 'blacklistr-screenshot';
+        a.download = 'blacklistr-screenshot.png';
         document.getElementById('images').innerHTML = '';
         document.getElementById('images').appendChild(a);
         a.click();
