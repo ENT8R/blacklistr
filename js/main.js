@@ -25,6 +25,10 @@ L.tileLayer('https://api.mapbox.com/styles/v1/ent8r/cjd7swe4x8ccm2so23wkllidk/ti
 
 const editor = CodeMirror(document.getElementById('countries'), {
   lineNumbers: true,
+  value: 'all except\nNL, # https://forum.openstreetmap.org/viewtopic.php?id=60356\n' +
+         'DK, # https://lists.openstreetmap.org/pipermail/talk-dk/2017-November/004898.html\n' +
+         'NO, # https://forum.openstreetmap.org/viewtopic.php?id=60357\n' +
+         'CZ, # https://lists.openstreetmap.org/pipermail/talk-cz/2017-November/017901.html',
   placeholder: 'Input all ISO-3166 country codes seperated by a comma or line break (comments are allowed too)',
   theme: 'material',
   mode: 'yaml',
@@ -78,23 +82,34 @@ function updateMap() {
   geoJSONLayer = L.geoJSON(countryBoundaries, {
     style: function(feature) {
       const countryCode = getCountryCode(feature.properties.tags);
-      if (mode == modes.blacklist) {
-        return getStyle('red');
+      if (countries.includes(countryCode)) {
+        if (mode == modes.blacklist) {
+          return getStyle('red');
+        } else {
+          return getStyle('green');
+        }
       } else {
-        return getStyle('green');
+        return getStyle('invisible');
       }
     },
     filter: function(feature) {
       const countryCode = getCountryCode(feature.properties.tags);
-      return countryCode != null && countries.includes(countryCode);
+      return countryCode != null && !bringToBack.includes(countryCode);
     },
     onEachFeature: function(feature, layer) {
-      const countryCode = getCountryCode(feature.properties.tags);
-      if (comments[countryCode]) {
-        let text = comments[countryCode];
-        if (isUrl(text)) text = text.link(text);
-        layer.bindPopup(text);
-      }
+      layer.on({
+        click: function(e) {
+          const countryCode = getCountryCode(e.target.feature.properties.tags);
+          const index = input.countries.indexOf(countryCode);
+          if (index > -1) {
+            input.countries.splice(index, 1);
+          } else {
+            input.countries.push(countryCode);
+          }
+          editor.setValue(stringifyInput(input));
+          updateMap();
+        }
+      });
     }
   }).addTo(map);
 }
@@ -115,6 +130,10 @@ function getStyle(color) {
       fillColor: '#2e7d32',
       weight: 1.2,
       fillOpacity: 0.8
+    },
+    invisible: {
+      fillOpacity: 0,
+      weight: 0
     }
   }
   return style[color];
@@ -160,6 +179,20 @@ function parseInput(input) {
   }
 
   return parsed;
+}
+
+function stringifyInput(input) {
+  let finalString = '';
+
+  if (input.mode == modes.blacklist) finalString += queryTypes.allExcept + '\n';
+  if (input.mode == modes.whitelist) finalString += queryTypes.only + '\n';
+
+  for (let i = 0; i < input.countries.length; i++) {
+    finalString += input.countries[i] + ',';
+    if (input.comments[input.countries[i]]) finalString += ' # ' + input.comments[input.countries[i]] + '\n';
+  }
+
+  return finalString;
 }
 
 function normalizeValue(value) {
