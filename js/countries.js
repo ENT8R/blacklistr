@@ -23,11 +23,11 @@ window.Countries = {
       }
 
       const data = lines[i].split('#', 2);
-      const countries = normalizeArray(data[0].split(','));
+      const countries = this.normalizeArray(data[0].split(','));
       const comments = data[1];
 
       for (let i = 0; i < countries.length; i++) {
-        parsed.countries.push(normalizeValue(countries[i]));
+        parsed.countries.push(this.normalize(countries[i]));
       }
 
       if (comments) {
@@ -43,7 +43,7 @@ window.Countries = {
     const allInsideMethod = allAfterMethod.split('}')[0];
     const allValues = allInsideMethod.split('{');
     const mode = allValues[1];
-    const countries = allValues[2].split('\n');
+    const countries = this.normalizeJavaCountries(allValues[2].split('\n'));
 
     let finalString = '';
 
@@ -53,8 +53,8 @@ window.Countries = {
 
     for (let i = 0; i < countries.length; i++) {
       if (countries[i] == "") continue;
-      finalString += countries[i].replace(/\/\//, ' #').replace(/\t/g, '').replace(/"/g, '');
-      if (countries[i].replace(/\/\//, '#').includes('#')) finalString += '\n';
+      finalString += countries[i];
+      if (countries[i]) finalString += '\n';
     }
     return finalString;
   },
@@ -71,5 +71,24 @@ window.Countries = {
     }
 
     return finalString;
+  },
+  normalize: function(value) {
+    return value.replace(/ /g, '').replace(/"/g, '').replace(/\t/g, '');
+  },
+  normalizeArray: function(array) {
+    let tempArray = [];
+    for (let i = 0; i < array.length; i++) {
+      if (array[i] == '' || array[i].length < 2) continue;
+      tempArray.push(this.normalize(array[i]));
+    }
+    return tempArray;
+  },
+  normalizeJavaCountries: function(array) {
+    let tempArray = [];
+    for (let i = 0; i < array.length; i++) {
+      if (array[i] == '') continue;
+      tempArray.push(array[i].replace(/\/\//, ' #').replace(/\t/g, '').replace(/"/g, ''));
+    }
+    return tempArray;
   }
 }

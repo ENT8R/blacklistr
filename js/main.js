@@ -159,19 +159,6 @@ function getCountryCode(tags) {
   return tags['ISO3166-2'] || tags['ISO3166-1:alpha2'];
 }
 
-function normalizeValue(value) {
-  return value.replace(/ /g, '').replace(/"/g, '').replace(/\t/g, '');
-}
-
-function normalizeArray(array) {
-  let tempArray = [];
-  for (let i = 0; i < array.length; i++) {
-    if (array[i] == '' || array[i].length < 2) continue;
-    tempArray.push(normalizeValue(array[i]));
-  }
-  return tempArray;
-}
-
 function isUrl(url) {
   return /^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/.test(url);
 }
