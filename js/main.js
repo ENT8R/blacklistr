@@ -68,7 +68,9 @@ function init() {
     });
   }
   if (java) {
-    request(questDirectory + java, function(value) {
+    let url = java;
+    if (!isUrl(java)) url = questDirectory + java;
+    request(url, function(value) {
       editor.setValue(Countries.parseJava(value));
       updateMap();
     });
