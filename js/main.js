@@ -13,7 +13,13 @@ let geoJSONLayer;
 
 const map = L.map('map', {
   minZoom: 2,
-  maxZoom: 22
+  maxZoom: 22,
+  preferCanvas: true,
+  zoomControl: false,
+  maxBounds: [
+    [90, 180],
+    [-90, -180]
+  ]
 }).setView([30, 0], 2);
 
 L.tileLayer('https://api.mapbox.com/styles/v1/ent8r/cjd7swe4x8ccm2so23wkllidk/tiles/256/{z}/{x}/{y}?access_token={accessToken}', {
@@ -26,9 +32,9 @@ L.tileLayer('https://api.mapbox.com/styles/v1/ent8r/cjd7swe4x8ccm2so23wkllidk/ti
 const editor = CodeMirror(document.getElementById('countries'), {
   lineNumbers: true,
   value: 'all except\nNL, # https://forum.openstreetmap.org/viewtopic.php?id=60356\n' +
-         'DK, # https://lists.openstreetmap.org/pipermail/talk-dk/2017-November/004898.html\n' +
-         'NO, # https://forum.openstreetmap.org/viewtopic.php?id=60357\n' +
-         'CZ, # https://lists.openstreetmap.org/pipermail/talk-cz/2017-November/017901.html',
+    'DK, # https://lists.openstreetmap.org/pipermail/talk-dk/2017-November/004898.html\n' +
+    'NO, # https://forum.openstreetmap.org/viewtopic.php?id=60357\n' +
+    'CZ, # https://lists.openstreetmap.org/pipermail/talk-cz/2017-November/017901.html',
   placeholder: 'Input all ISO-3166 country codes seperated by a comma or line break (comments are allowed too)',
   theme: 'material',
   mode: 'yaml',
@@ -48,6 +54,7 @@ function init() {
 
   const data = url.searchParams.get('data');
   const file = url.searchParams.get('file');
+  const java = url.searchParams.get('java');
 
   if (data) {
     editor.setValue(data);
@@ -56,6 +63,12 @@ function init() {
   if (file) {
     request(file, function(value) {
       editor.setValue(value);
+      updateMap();
+    });
+  }
+  if (java) {
+    request(java, function(value) {
+      editor.setValue(Countries.parseJava(value));
       updateMap();
     });
   }
@@ -74,12 +87,12 @@ function request(url, callback) {
 
 function updateMap() {
   if (geoJSONLayer) map.removeLayer(geoJSONLayer);
-  const input = parseInput(editor.getValue());
+  const input = Countries.parse(editor.getValue());
   const countries = input.countries;
   const comments = input.comments;
   const mode = input.mode;
 
-  geoJSONLayer = L.geoJSON(countryBoundaries, {
+  geoJSONLayer = L.geoJSON(boundaries, {
     style: function(feature) {
       const countryCode = getCountryCode(feature.properties.tags);
       if (countries.includes(countryCode)) {
@@ -106,7 +119,7 @@ function updateMap() {
           } else {
             input.countries.push(countryCode);
           }
-          editor.setValue(stringifyInput(input));
+          editor.setValue(Countries.stringify(input));
           updateMap();
         }
       });
@@ -143,60 +156,8 @@ function getCountryCode(tags) {
   return tags['ISO3166-2'] || tags['ISO3166-1:alpha2'];
 }
 
-function parseInput(input) {
-  let parsed = {
-    countries: [],
-    comments: {},
-    mode: ''
-  };
-
-  if (!input) return parsed;
-  const lines = input.split('\n');
-  if (!lines) return parsed;
-
-  for (let i = 0; i < lines.length; i++) {
-    //Filter out lines with comments
-    if (lines[i].startsWith('#') || lines[i] == '' || lines[i] == '\n') continue;
-
-    //Set the mode if not set yet
-    if (!parsed.mode) {
-      if (lines[i].startsWith(queryTypes.allExcept)) parsed.mode = modes.blacklist;
-      if (lines[i].startsWith(queryTypes.only)) parsed.mode = modes.whitelist;
-      continue;
-    }
-
-    const data = lines[i].split('#', 2);
-    const countries = normalizeArray(data[0].split(','));
-    const comments = data[1];
-
-    for (let i = 0; i < countries.length; i++) {
-      parsed.countries.push(normalizeValue(countries[i]));
-    }
-
-    if (comments) {
-      parsed.comments[countries[countries.length - 1]] = comments.replace(' ', '');
-    }
-  }
-
-  return parsed;
-}
-
-function stringifyInput(input) {
-  let finalString = '';
-
-  if (input.mode == modes.blacklist) finalString += queryTypes.allExcept + '\n';
-  if (input.mode == modes.whitelist) finalString += queryTypes.only + '\n';
-
-  for (let i = 0; i < input.countries.length; i++) {
-    finalString += input.countries[i] + ',';
-    if (input.comments[input.countries[i]]) finalString += ' # ' + input.comments[input.countries[i]] + '\n';
-  }
-
-  return finalString;
-}
-
 function normalizeValue(value) {
-  return value.replace(/ /g, '');
+  return value.replace(/ /g, '').replace(/"/g, '').replace(/\t/g, '');
 }
 
 function normalizeArray(array) {
@@ -211,6 +172,7 @@ function normalizeArray(array) {
 function isUrl(url) {
   return /^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/.test(url);
 }
+
 function toggleSide() {
   $('#side').toggle();
   if ($('#map').hasClass('s8')) $('#map').removeClass('s8').addClass('s12');

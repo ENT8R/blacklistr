@@ -1,4 +1,4 @@
-const codes = {
+window.codes = {
   "AF": "Afghanistan",
   "AL": "Albania",
   "DZ": "Algeria",
