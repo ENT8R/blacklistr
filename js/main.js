@@ -8,6 +8,7 @@ const queryTypes = {
   allExcept: 'all except',
   only: 'only'
 }
+const questDirectory = 'https://raw.githubusercontent.com/westnordost/StreetComplete/master/app/src/main/java/de/westnordost/streetcomplete/quests/';
 
 let geoJSONLayer;
 
@@ -67,7 +68,7 @@ function init() {
     });
   }
   if (java) {
-    request(java, function(value) {
+    request(questDirectory + java, function(value) {
       editor.setValue(Countries.parseJava(value));
       updateMap();
     });
