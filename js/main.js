@@ -12,6 +12,9 @@ const questDirectory = 'https://raw.githubusercontent.com/westnordost/StreetComp
 
 let geoJSONLayer;
 
+const screenshotButton = new Buttons.ScreenshotButton();
+const resetButton = new Buttons.ResetButton();
+
 const map = L.map('map', {
   minZoom: 2,
   maxZoom: 22,
@@ -30,9 +33,14 @@ L.tileLayer('https://api.mapbox.com/styles/v1/ent8r/cjd7swe4x8ccm2so23wkllidk/ti
   attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
+map.addControl(new Buttons.HideButton());
+map.addControl(screenshotButton);
+map.addControl(resetButton);
+
 const editor = CodeMirror(document.getElementById('countries'), {
   lineNumbers: true,
-  value: 'all except\nNL, # https://forum.openstreetmap.org/viewtopic.php?id=60356\n' +
+  value: 'all except\n' +
+    'NL, # https://forum.openstreetmap.org/viewtopic.php?id=60356\n' +
     'DK, # https://lists.openstreetmap.org/pipermail/talk-dk/2017-November/004898.html\n' +
     'NO, # https://forum.openstreetmap.org/viewtopic.php?id=60357\n' +
     'CZ, # https://lists.openstreetmap.org/pipermail/talk-cz/2017-November/017901.html',
@@ -128,6 +136,21 @@ function updateMap() {
       });
     }
   }).addTo(map);
+
+  updateText(input);
+}
+
+function updateText(input) {
+  let finalString = '';
+
+  if (input.mode == modes.blacklist) finalString += 'Blacklisted in ';
+  else if (input.mode == modes.whitelist) finalString += 'Whitelisted in ';
+
+  for (let i = 0; i < input.countries.length; i++) {
+    finalString += codes[input.countries[i]];
+    if (input.countries.indexOf(input.countries[i]) != input.countries.length - 1) finalString += ', ';
+  }
+  //TODO: work with the finalString
 }
 
 function getStyle(color) {
@@ -164,82 +187,15 @@ function isUrl(url) {
 }
 
 function toggleSide() {
-  $('#side').toggle();
-  if ($('#map').hasClass('s8')) $('#map').removeClass('s8').addClass('s12');
-  else $('#map').removeClass('s12').addClass('s8');
+  if ($('#map').hasClass('s8')) {
+    $('#map').removeClass('s8').addClass('s12');
+    map.removeControl(screenshotButton);
+    map.removeControl(resetButton);
+  }
+  else {
+    $('#map').removeClass('s12').addClass('s8');
+    map.addControl(screenshotButton);
+    map.addControl(resetButton);
+  }
+  editor.refresh();
 }
-
-const screenshotButton = L.Control.extend({
-  options: {
-    position: 'topleft'
-  },
-  onAdd: function(map) {
-    const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
-    container.type = 'button';
-    container.style.cursor = 'pointer';
-    container.style.backgroundColor = 'white';
-    container.innerHTML = '<i class="material-icons">camera_alt</i>';
-    container.style.backgroundSize = '30px 30px';
-    container.style.width = '30px';
-    container.style.height = '30px';
-    container.onclick = function() {
-      container.style.backgroundColor = '#ffa726';
-      leafletImage(map, function(err, canvas) {
-        const a = document.createElement('a');
-        a.href = canvas.toDataURL();
-        a.download = 'blacklistr-screenshot.png';
-        document.getElementById('images').innerHTML = '';
-        document.getElementById('images').appendChild(a);
-        a.click();
-        container.style.backgroundColor = 'white';
-      });
-    }
-    return container;
-  }
-});
-const resetButton = L.Control.extend({
-  options: {
-    position: 'topleft'
-  },
-  onAdd: function(map) {
-    const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
-    container.type = 'button';
-    container.style.cursor = 'pointer';
-    container.style.backgroundColor = 'white';
-    container.innerHTML = '<i class="material-icons">autorenew</i>';
-    container.style.backgroundSize = '30px 30px';
-    container.style.width = '30px';
-    container.style.height = '30px';
-    container.onclick = function() {
-      container.style.backgroundColor = '#ffa726';
-      map.setView([30, 0], 2);
-      container.style.backgroundColor = 'white';
-    }
-    return container;
-  }
-});
-const hideButton = L.Control.extend({
-  options: {
-    position: 'topright'
-  },
-  onAdd: function(map) {
-    const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
-    container.type = 'button';
-    container.style.cursor = 'pointer';
-    container.style.backgroundColor = 'white';
-    container.innerHTML = '<i class="material-icons">keyboard_hide</i>';
-    container.style.backgroundSize = '30px 30px';
-    container.style.width = '30px';
-    container.style.height = '30px';
-    container.onclick = function() {
-      container.style.backgroundColor = '#ffa726';
-      toggleSide();
-      map._onResize();
-      container.style.backgroundColor = 'white';
-    }
-    return container;
-  }
-});
-map.addControl(new screenshotButton());
-map.addControl(new resetButton());
-map.addControl(new hideButton());
