@@ -5,7 +5,6 @@ window.Buttons = {
     },
     onAdd: function(map) {
       const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
-      container.type = 'button';
       container.style.cursor = 'pointer';
       container.style.backgroundColor = 'white';
       container.innerHTML = '<i class="material-icons">camera_alt</i>';
@@ -33,7 +32,6 @@ window.Buttons = {
     },
     onAdd: function(map) {
       const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
-      container.type = 'button';
       container.style.cursor = 'pointer';
       container.style.backgroundColor = 'white';
       container.innerHTML = '<i class="material-icons">autorenew</i>';
@@ -41,9 +39,7 @@ window.Buttons = {
       container.style.width = '30px';
       container.style.height = '30px';
       container.onclick = function() {
-        container.style.backgroundColor = '#ffa726';
         map.setView([30, 0], 2);
-        container.style.backgroundColor = 'white';
       }
       return container;
     }
@@ -54,7 +50,6 @@ window.Buttons = {
     },
     onAdd: function(map) {
       const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
-      container.type = 'button';
       container.style.cursor = 'pointer';
       container.style.backgroundColor = 'white';
       container.innerHTML = '<i class="material-icons">keyboard_hide</i>';
@@ -62,10 +57,26 @@ window.Buttons = {
       container.style.width = '30px';
       container.style.height = '30px';
       container.onclick = function() {
-        container.style.backgroundColor = '#ffa726';
         toggleSide();
         map._onResize();
-        container.style.backgroundColor = 'white';
+      }
+      return container;
+    }
+  }),
+  ListButton: L.Control.extend({
+    options: {
+      position: 'topright'
+    },
+    onAdd: function(map) {
+      const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+      container.style.cursor = 'pointer';
+      container.style.backgroundColor = 'white';
+      container.innerHTML = '<i class="material-icons">format_list_bulleted</i>';
+      container.style.backgroundSize = '30px 30px';
+      container.style.width = '30px';
+      container.style.height = '30px';
+      container.onclick = function() {
+        $('#list').modal('open');
       }
       return container;
     }

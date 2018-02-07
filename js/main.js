@@ -14,6 +14,7 @@ let geoJSONLayer;
 
 const screenshotButton = new Buttons.ScreenshotButton();
 const resetButton = new Buttons.ResetButton();
+const listButton = new Buttons.ListButton();
 
 const map = L.map('map', {
   minZoom: 2,
@@ -36,6 +37,7 @@ L.tileLayer('https://api.mapbox.com/styles/v1/ent8r/cjd7swe4x8ccm2so23wkllidk/ti
 map.addControl(new Buttons.HideButton());
 map.addControl(screenshotButton);
 map.addControl(resetButton);
+map.addControl(listButton);
 
 const editor = CodeMirror(document.getElementById('countries'), {
   lineNumbers: true,
@@ -59,6 +61,8 @@ updateMap();
 
 //Get the URL params and use them to e.g. show the data on the map
 function init() {
+  $('.modal').modal();
+  
   const url = new URL(window.location.href);
 
   const data = url.searchParams.get('data');
@@ -150,7 +154,7 @@ function updateText(input) {
     finalString += codes[input.countries[i]];
     if (input.countries.indexOf(input.countries[i]) != input.countries.length - 1) finalString += ', ';
   }
-  //TODO: work with the finalString
+  $('#country-list').html(finalString);
 }
 
 function getStyle(color) {
@@ -191,11 +195,13 @@ function toggleSide() {
     $('#map').removeClass('s8').addClass('s12');
     map.removeControl(screenshotButton);
     map.removeControl(resetButton);
+    map.removeControl(listButton);
   }
   else {
     $('#map').removeClass('s12').addClass('s8');
     map.addControl(screenshotButton);
     map.addControl(resetButton);
+    map.addControl(listButton);
   }
   editor.refresh();
 }

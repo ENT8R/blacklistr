@@ -18,7 +18,9 @@
   <link rel="shortcut icon" type="image/x-icon" href="assets/icon.png">
 
   <style>
-    #map, .CodeMirror, .CodeMirror-scroll {
+    #map,
+    .CodeMirror,
+    .CodeMirror-scroll {
       height: 100vh;
     }
   </style>
@@ -35,6 +37,15 @@
       <div id="images"></div>
     </div>
 
+  </div>
+
+  <div id="list" class="modal">
+    <div class="modal-content">
+      <p id="country-list"></p>
+    </div>
+    <div class="modal-footer">
+      <a class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+    </div>
   </div>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
