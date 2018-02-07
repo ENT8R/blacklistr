@@ -39,11 +39,19 @@ window.Countries = {
   },
   //Parses a java file (used by StreetComplete)
   parseJava: function(input) {
-    const allAfterMethod = input.split('getEnabledForCountries()')[1];
+    let mode;
+
+    if (input.includes('Countries.noneExcept')) {
+      mode = 'Countries.noneExcept';
+    } else if (input.includes('Countries.allExcept')) {
+      mode = 'Countries.allExcept';
+    } else {
+      throw new TypeError('This file is not valid and contains no black- or whitelist!');
+    }
+
+    const allAfterMethod = input.split(mode)[1];
     const allInsideMethod = allAfterMethod.split('}')[0];
-    const allValues = allInsideMethod.split('{');
-    const mode = allValues[1];
-    const countries = this.normalizeJavaCountries(allValues[2].split('\n'));
+    const countries = this.normalizeJavaCountries(allInsideMethod.split('{')[1].split('\n'));
 
     let finalString = '';
 
@@ -54,7 +62,7 @@ window.Countries = {
     for (let i = 0; i < countries.length; i++) {
       if (countries[i] == "") continue;
       finalString += countries[i];
-      if (countries[i]) finalString += '\n';
+      finalString += '\n';
     }
     return finalString;
   },
