@@ -62,7 +62,7 @@ updateMap();
 //Get the URL params and use them to e.g. show the data on the map
 function init() {
   $('.modal').modal();
-  
+
   const url = new URL(window.location.href);
 
   const data = url.searchParams.get('data');
@@ -109,7 +109,7 @@ function updateMap() {
 
   geoJSONLayer = L.geoJSON(boundaries, {
     style: function(feature) {
-      const countryCode = getCountryCode(feature.properties.tags);
+      const countryCode = getCountryCode(feature.properties);
       if (countries.includes(countryCode)) {
         if (mode == modes.blacklist) {
           return getStyle('red');
@@ -121,13 +121,13 @@ function updateMap() {
       }
     },
     filter: function(feature) {
-      const countryCode = getCountryCode(feature.properties.tags);
+      const countryCode = getCountryCode(feature.properties);
       return countryCode != null && !bringToBack.includes(countryCode);
     },
     onEachFeature: function(feature, layer) {
       layer.on({
         click: function(e) {
-          const countryCode = getCountryCode(e.target.feature.properties.tags);
+          const countryCode = getCountryCode(e.target.feature.properties);
           const index = input.countries.indexOf(countryCode);
           if (index > -1) {
             input.countries.splice(index, 1);

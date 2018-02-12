@@ -3,16 +3,16 @@ const fs = require('fs');
 //Convert https://github.com/westnordost/StreetComplete/blob/master/res/countryBoundaries.osm to GeoJSON before using http://tyrasd.github.io/osmtogeojson/
 const countryBoundaries = JSON.parse(fs.readFileSync('./assets/boundaries.geojson', 'utf-8'));
 
-//convert LineStrings to Polygons for a consistent look
+/*//convert LineStrings to Polygons for a consistent look
 for (let i = 0; i < countryBoundaries.features.length; i++) {
   if (countryBoundaries.features[i].geometry.type == 'LineString') {
     countryBoundaries.features[i] = lineToPolygon(countryBoundaries.features[i]);
   }
-}
+}*/
 
 fs.writeFileSync('./assets/boundaries.js', 'window.boundaries = ' + JSON.stringify(countryBoundaries), 'utf8');
 
-// compare 2 arrays
+/*// compare 2 arrays
 function areIdentical(a, b) {
   return a.length === b.length && a.every(function(v, i) {
     return v === b[i];
@@ -50,4 +50,4 @@ function lineToPolygon(f) {
   geometry.coordinates = [geometry.coordinates];
 
   return f;
-}
+}*/
