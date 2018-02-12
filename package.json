@@ -4,6 +4,7 @@
   "description": "A website for visualizing country specific data",
   "scripts": {
     "start": "python -m SimpleHTTPServer",
+    "build": "node js/build.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "ENT8R <info.ent8r@gmail.com>",
