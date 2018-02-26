@@ -19,10 +19,22 @@
 
   <style>
     #map,
-    .CodeMirror,
-    .CodeMirror-scroll {
+    #countries {
       height: 100vh;
     }
+
+    .CodeMirror,
+    .CodeMirror-scroll {
+      height: 70vh;
+    }
+
+    #country-list-container {
+        height: 30vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
   </style>
 </head>
 
@@ -33,7 +45,12 @@
     <div id="map" class="col s8"></div>
 
     <div id="side">
-      <div id="countries"></div>
+      <div id="countries">
+          <div id="codemirror-container"></div>
+          <div id="country-list-container">
+              <div id="country-list"></div>
+          </div>
+      </div>
       <div id="images"></div>
     </div>
 
@@ -41,7 +58,7 @@
 
   <div id="list" class="modal">
     <div class="modal-content">
-      <p id="country-list"></p>
+
     </div>
     <div class="modal-footer">
       <a class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
