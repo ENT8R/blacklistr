@@ -14,7 +14,6 @@ let geoJSONLayer;
 
 const screenshotButton = new Buttons.ScreenshotButton();
 const resetButton = new Buttons.ResetButton();
-const listButton = new Buttons.ListButton();
 
 const map = L.map('map', {
   minZoom: 2,
@@ -37,9 +36,8 @@ L.tileLayer('https://api.mapbox.com/styles/v1/ent8r/cjd7swe4x8ccm2so23wkllidk/ti
 map.addControl(new Buttons.HideButton());
 map.addControl(screenshotButton);
 map.addControl(resetButton);
-map.addControl(listButton);
 
-const editor = CodeMirror(document.getElementById('countries'), {
+const editor = CodeMirror(document.getElementById('codemirror-container'), {
   lineNumbers: true,
   value: 'all except\n' +
     'NL, # https://forum.openstreetmap.org/viewtopic.php?id=60356\n' +
@@ -195,13 +193,11 @@ function toggleSide() {
     $('#map').removeClass('s8').addClass('s12');
     map.removeControl(screenshotButton);
     map.removeControl(resetButton);
-    map.removeControl(listButton);
   }
   else {
     $('#map').removeClass('s12').addClass('s8');
     map.addControl(screenshotButton);
     map.addControl(resetButton);
-    map.addControl(listButton);
   }
   editor.refresh();
 }
