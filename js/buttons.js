@@ -62,23 +62,5 @@ window.Buttons = {
       }
       return container;
     }
-  }),
-  ListButton: L.Control.extend({
-    options: {
-      position: 'topright'
-    },
-    onAdd: function(map) {
-      const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
-      container.style.cursor = 'pointer';
-      container.style.backgroundColor = 'white';
-      container.innerHTML = '<i class="material-icons">format_list_bulleted</i>';
-      container.style.backgroundSize = '30px 30px';
-      container.style.width = '30px';
-      container.style.height = '30px';
-      container.onclick = function() {
-        $('#list').modal('open');
-      }
-      return container;
-    }
   })
 }

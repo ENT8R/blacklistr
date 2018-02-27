@@ -9,6 +9,11 @@ const queryTypes = {
   only: 'only'
 }
 const questDirectory = 'https://raw.githubusercontent.com/westnordost/StreetComplete/master/app/src/main/java/de/westnordost/streetcomplete/quests/';
+const placeholder = 'all except\n' +
+  'NL, # https://forum.openstreetmap.org/viewtopic.php?id=60356\n' +
+  'DK, # https://lists.openstreetmap.org/pipermail/talk-dk/2017-November/004898.html\n' +
+  'NO, # https://forum.openstreetmap.org/viewtopic.php?id=60357\n' +
+  'CZ, # https://lists.openstreetmap.org/pipermail/talk-cz/2017-November/017901.html';
 
 let geoJSONLayer;
 
@@ -39,11 +44,7 @@ map.addControl(resetButton);
 
 const editor = CodeMirror(document.getElementById('codemirror-container'), {
   lineNumbers: true,
-  value: 'all except\n' +
-    'NL, # https://forum.openstreetmap.org/viewtopic.php?id=60356\n' +
-    'DK, # https://lists.openstreetmap.org/pipermail/talk-dk/2017-November/004898.html\n' +
-    'NO, # https://forum.openstreetmap.org/viewtopic.php?id=60357\n' +
-    'CZ, # https://lists.openstreetmap.org/pipermail/talk-cz/2017-November/017901.html',
+  value: placeholder,
   placeholder: 'Input all ISO-3166 country codes seperated by a comma or line break (comments are allowed too)',
   theme: 'material',
   mode: 'yaml',
@@ -193,8 +194,7 @@ function toggleSide() {
     $('#map').removeClass('s8').addClass('s12');
     map.removeControl(screenshotButton);
     map.removeControl(resetButton);
-  }
-  else {
+  } else {
     $('#map').removeClass('s12').addClass('s8');
     map.addControl(screenshotButton);
     map.addControl(resetButton);
