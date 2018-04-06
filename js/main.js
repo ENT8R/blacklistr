@@ -10,10 +10,10 @@ const queryTypes = {
 }
 const questDirectory = 'https://raw.githubusercontent.com/westnordost/StreetComplete/master/app/src/main/java/de/westnordost/streetcomplete/quests/';
 const placeholder = 'all except\n' +
-  'NL, # https://forum.openstreetmap.org/viewtopic.php?id=60356\n' +
-  'DK, # https://lists.openstreetmap.org/pipermail/talk-dk/2017-November/004898.html\n' +
-  'NO, # https://forum.openstreetmap.org/viewtopic.php?id=60357\n' +
-  'CZ, # https://lists.openstreetmap.org/pipermail/talk-cz/2017-November/017901.html';
+  '"NL", // https://forum.openstreetmap.org/viewtopic.php?id=60356\n' +
+  '"DK", // https://lists.openstreetmap.org/pipermail/talk-dk/2017-November/004898.html\n' +
+  '"NO", // https://forum.openstreetmap.org/viewtopic.php?id=60357\n' +
+  '"CZ", // https://lists.openstreetmap.org/pipermail/talk-cz/2017-November/017901.html';
 
 let geoJSONLayer;
 
@@ -47,9 +47,10 @@ const editor = CodeMirror(document.getElementById('codemirror-container'), {
   value: placeholder,
   placeholder: 'Input all ISO-3166 country codes seperated by a comma or line break (comments are allowed too)',
   theme: 'material',
-  mode: 'yaml',
+  mode: 'javascript',
   autofocus: true,
-  lineWrapping: true
+  lineWrapping: true,
+  smartIndent: false
 });
 editor.on('change', function(cm, change) {
   updateMap();

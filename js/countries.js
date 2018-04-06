@@ -13,7 +13,7 @@ window.Countries = {
 
     for (let i = 0; i < lines.length; i++) {
       //Filter out lines that start with comments
-      if (lines[i].startsWith('#') || lines[i] == '' || lines[i] == '\n') continue;
+      if (lines[i].startsWith('//') || lines[i] == '' || lines[i] == '\n') continue;
 
       //Set the mode if it is not set yet
       if (!parsed.mode) {
@@ -22,12 +22,12 @@ window.Countries = {
         continue;
       }
 
-      const data = lines[i].split('#', 2);
+      const data = lines[i].split(/\/\/ (.+)?/, 2);
       const countries = this.normalizeArray(data[0].split(','));
       const comments = data[1];
 
       for (let i = 0; i < countries.length; i++) {
-        parsed.countries.push(this.normalize(countries[i]));
+        parsed.countries.push(this.normalize(countries[i]).replace(/"/g, ''));
       }
 
       if (comments) {
@@ -74,14 +74,14 @@ window.Countries = {
     if (input.mode == modes.whitelist) finalString += queryTypes.only + '\n';
 
     for (let i = 0; i < input.countries.length; i++) {
-      finalString += input.countries[i] + ',';
-      if (input.comments[input.countries[i]]) finalString += ' # ' + input.comments[input.countries[i]] + '\n';
+      finalString += '"' + input.countries[i] + '"' + ',';
+      if (input.comments['"' + input.countries[i] + '"']) finalString += ' // ' + input.comments['"' + input.countries[i] + '"'] + '\n';
     }
 
     return finalString;
   },
   normalize: function(value) {
-    return value.replace(/ /g, '').replace(/"/g, '').replace(/\t/g, '');
+    return value.replace(/ /g, '').replace(/\t/g, '');
   },
   normalizeArray: function(array) {
     let tempArray = [];
@@ -95,7 +95,7 @@ window.Countries = {
     let tempArray = [];
     for (let i = 0; i < array.length; i++) {
       if (array[i] == '') continue;
-      tempArray.push(array[i].replace(/\/\//, '#').replace(/\t/g, '').replace(/"/g, ''));
+      tempArray.push(array[i].replace(/\/\//, '//').replace(/\t/g, ''));
     }
     return tempArray;
   }
