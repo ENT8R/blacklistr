@@ -1,5 +1,5 @@
 window.Countries = {
-  //Parse a given input string
+  //Parses a given input string
   parse: function(input) {
     let parsed = {
       countries: [],
@@ -12,10 +12,10 @@ window.Countries = {
     if (!lines) return parsed;
 
     for (let i = 0; i < lines.length; i++) {
-      //Filter out lines with comments
+      //Filter out lines that start with comments
       if (lines[i].startsWith('#') || lines[i] == '' || lines[i] == '\n') continue;
 
-      //Set the mode if not set yet
+      //Set the mode if it is not set yet
       if (!parsed.mode) {
         if (lines[i].startsWith(queryTypes.allExcept)) parsed.mode = modes.blacklist;
         if (lines[i].startsWith(queryTypes.only)) parsed.mode = modes.whitelist;
@@ -86,7 +86,7 @@ window.Countries = {
   normalizeArray: function(array) {
     let tempArray = [];
     for (let i = 0; i < array.length; i++) {
-      if (array[i] == '' || array[i].length < 2) continue;
+      if (array[i] == '' || array[i].length < 2 || !array[i].match("[a-zA-Z]+")) continue;
       tempArray.push(this.normalize(array[i]));
     }
     return tempArray;
@@ -95,7 +95,7 @@ window.Countries = {
     let tempArray = [];
     for (let i = 0; i < array.length; i++) {
       if (array[i] == '') continue;
-      tempArray.push(array[i].replace(/\/\//, ' #').replace(/\t/g, '').replace(/"/g, ''));
+      tempArray.push(array[i].replace(/\/\//, '#').replace(/\t/g, '').replace(/"/g, ''));
     }
     return tempArray;
   }
