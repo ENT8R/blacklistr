@@ -1,10 +1,8 @@
-# blacklistr
+# [blacklistr](https://ent8r.github.io/blacklistr/)
 
-blacklistr is a tool for visualizing in which countries a specific feature exists or doesn't exist
+[blacklistr](https://ent8r.github.io/blacklistr/) is a tool for visualizing in which countries a specific feature exists or doesn't exist
 
 ### Getting started
-
-Head over to [blacklistr](https://ent8r.github.io/blacklistr/)
 
 To change the state of a country from disabled to enabled (or the other way round), you have two options:
 
@@ -18,16 +16,19 @@ All country codes should be a valid [ISO 3166-1 alpha-2](https://en.wikipedia.or
 #### Load data from a string
 
 To load the data from a string use the endpoint `/?data={data}`
+
 Example: [`/?data=all except "NL", "DK", "NO", "CZ"`](https://ent8r.github.io/blacklistr/?data=all%20except%0A%22NL%22,%20%22DK%22,%20%22NO%22,%20%22CZ%22)
 
 #### Load data from a file
 
 To load the data from a file use the endpoint `/?file={file_name}`
+
 Example: [`/?file=https://ent8r.github.io/blacklistr/assets/test.js`](https://ent8r.github.io/blacklistr/?file=https://ent8r.github.io/blacklistr/assets/test.js)
 
 #### Load StreetComplete data
 
 To load the data used by StreetComplete use the endpoint `/?java={questDirectory/questName}`
+
 Example: [`/?java=housenumber/AddHousenumber.java`](https://ent8r.github.io/blacklistr/?java=housenumber/AddHousenumber.java)
 
 ### Found an issue?
