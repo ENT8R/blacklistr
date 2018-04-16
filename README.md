@@ -27,7 +27,7 @@ Example: [`/?file=https://ent8r.github.io/blacklistr/assets/test.js`](https://en
 
 #### Load StreetComplete data
 
-To load the data used by StreetComplete use the endpoint `/?java={questDirectory/questName}`
+To load the data used by [StreetComplete](https://github.com/westnordost/StreetComplete/) use the endpoint `/?java={questDirectory/questName}`
 
 Example: [`/?java=housenumber/AddHousenumber.java`](https://ent8r.github.io/blacklistr/?java=housenumber/AddHousenumber.java)
 
