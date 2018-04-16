@@ -19,15 +19,15 @@ class Polygon:
 		self.tags = []
 		self.shell = None
 		self.holes = []
-	
+
 	def to_string(self):
 		return feature_string("Polygon", self.tags, polygon_string(self.shell, self.holes))
-		
+
 class MultiPolygon:
 	def __init__(self):
 		self.tags = []
 		self.polys = []
-	
+
 	def to_string(self):
 		return feature_string("MultiPolygon", self.tags, multipolygon_string(self.polys))
 
@@ -79,7 +79,7 @@ def multipolygon_string(polygons):
 
 def interesting_tags(tags):
 	return filter(lambda tag: tag[0] == "ISO3166-1:alpha2" or tag[0] == "ISO3166-2" or tag[0] == "name:en", tags)
-	
+
 def has_interesting_tags(tags):
 	if not tags:
 		return False
@@ -149,8 +149,8 @@ def convert_relations(relations):
 			geometries.append(multipoly)
 	return geometries
 
-source_file_name = "boundaries.osm"
-target_file_name = "boundaries.json"
+source_file_name = "assets/boundaries.osm"
+target_file_name = "assets/boundaries.geojson"
 
 ways, relations = read(source_file_name)
 geometries = convert_ways(ways) + convert_relations(relations)
