@@ -32,9 +32,9 @@ const map = L.map('map', {
 }).setView([30, 0], 2);
 
 L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
-	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+  attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
   minZoom: 2,
-	maxZoom: 19
+  maxZoom: 19
 }).addTo(map);
 
 map.addControl(new Buttons.HideButton());
@@ -43,7 +43,7 @@ map.addControl(resetButton);
 
 const editor = CodeMirror(document.getElementById('codemirror-container'), {
   lineNumbers: true,
-  value: placeholder,
+  value: hasURLParams() ? "" : placeholder,
   placeholder: 'Input all ISO-3166 country codes seperated by a comma or line break (comments are allowed too)',
   theme: 'material',
   mode: 'javascript',
@@ -60,8 +60,6 @@ updateMap();
 
 //Get the URL params and use them to e.g. show the data on the map
 function init() {
-  $('.modal').modal();
-
   const url = new URL(window.location.href);
 
   const data = url.searchParams.get('data');
@@ -110,11 +108,8 @@ function updateMap() {
     style: function(feature) {
       const countryCode = getCountryCode(feature.properties);
       if (countries.includes(countryCode)) {
-        if (mode == modes.blacklist) {
-          return getStyle('red');
-        } else {
-          return getStyle('green');
-        }
+        if (mode == modes.blacklist) return getStyle('red');
+        else return getStyle('green');
       } else {
         return getStyle('invisible');
       }
@@ -153,7 +148,9 @@ function updateText(input) {
     finalString += codes[input.countries[i]];
     if (input.countries.indexOf(input.countries[i]) != input.countries.length - 1) finalString += ', ';
   }
-  $('#country-list').html(finalString);
+  const countryList = document.getElementById('country-list');
+  if (input.countries.length > 0) countryList.innerHTML = finalString;
+  else countryList.innerHTML = '';
 }
 
 function getStyle(color) {
@@ -189,13 +186,27 @@ function isUrl(url) {
   return /^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/.test(url);
 }
 
+function hasURLParams() {
+  const url = new URL(window.location.href);
+  return url.searchParams.get('data') != null || url.searchParams.get('file') != null || url.searchParams.get('java') != null;
+}
+
+function hasClass(element, cls) {
+  if ((" " + element.className + " ").replace(/[\n\t]/g, " ").indexOf(cls) > -1) return true;
+  return false;
+}
+
 function toggleSide() {
-  if ($('#map').hasClass('s8')) {
-    $('#map').removeClass('s8').addClass('s12');
+  const mapContainer = document.getElementById('map');
+
+  if (hasClass(mapContainer, 's8')) {
+    mapContainer.classList.remove('s8');
+    mapContainer.classList.add('s12');
     map.removeControl(screenshotButton);
     map.removeControl(resetButton);
   } else {
-    $('#map').removeClass('s12').addClass('s8');
+    mapContainer.classList.remove('s12');
+    mapContainer.classList.add('s8');
     map.addControl(screenshotButton);
     map.addControl(resetButton);
   }

@@ -1,0 +1,68 @@
+html {
+  line-height: 1.5;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  font-weight: normal;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+@media only screen and (min-width: 0) {
+  html {
+    font-size: 14px;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  html {
+    font-size: 14.5px;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+body {
+  margin: 0;
+}
+
+.col {
+  float: left;
+  margin-left: auto;
+  left: auto;
+  right: auto;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0 0.75rem;
+  min-height: 1px;
+}
+
+.col.s8 {
+  width: 66.6666666667%;
+}
+
+.col.s12 {
+  width: 100%;
+}
+
+#map, #countries {
+  height: 100vh;
+}
+
+.CodeMirror, .CodeMirror-scroll {
+  height: 70vh;
+}
+
+#country-list-container {
+  height: 30vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#country-list {
+  padding: 5px;
+  overflow-y: scroll;
+  max-height: 100%;
+}
