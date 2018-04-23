@@ -71,7 +71,7 @@ function init() {
     updateMap();
   }
   if (file) {
-    request(file, function(value) {
+    request(file, value => {
       editor.setValue(value);
       updateMap();
     });
@@ -79,7 +79,7 @@ function init() {
   if (java) {
     let url = java;
     if (!isUrl(java)) url = questDirectory + java;
-    request(url, function(value) {
+    request(url, value => {
       editor.setValue(Countries.parseJava(value));
       updateMap();
     });
@@ -192,7 +192,7 @@ function hasURLParams() {
 }
 
 function hasClass(element, cls) {
-  if ((" " + element.className + " ").replace(/[\n\t]/g, " ").indexOf(cls) > -1) return true;
+  if ((`${element.className}`).replace(/[\n\t]/g, " ").includes(cls)) return true;
   return false;
 }
 

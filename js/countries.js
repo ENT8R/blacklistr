@@ -1,6 +1,6 @@
 window.Countries = {
   //Parses a given input string
-  parse: function(input) {
+  parse(input) {
     let parsed = {
       countries: [],
       comments: {},
@@ -38,7 +38,7 @@ window.Countries = {
     return parsed;
   },
   //Parses a java file (used by StreetComplete)
-  parseJava: function(input) {
+  parseJava(input) {
     let mode;
 
     if (input.includes('Countries.noneExcept')) {
@@ -67,23 +67,23 @@ window.Countries = {
     return finalString;
   },
   //Stringify a given input object
-  stringify: function(input) {
+  stringify(input) {
     let finalString = '';
 
-    if (input.mode == modes.blacklist) finalString += queryTypes.allExcept + '\n';
-    if (input.mode == modes.whitelist) finalString += queryTypes.only + '\n';
+    if (input.mode == modes.blacklist) finalString += `${queryTypes.allExcept}\n`;
+    if (input.mode == modes.whitelist) finalString += `${queryTypes.only}\n`;
 
     for (let i = 0; i < input.countries.length; i++) {
-      finalString += '"' + input.countries[i] + '"' + ',';
-      if (input.comments['"' + input.countries[i] + '"']) finalString += ' // ' + input.comments['"' + input.countries[i] + '"'] + '\n';
+      finalString += `${input.countries[i]},`;
+      if (input.comments[`${input.countries[i]}`]) finalString += ` // ${input.comments[`${input.countries[i]}`]}\n`;
     }
 
     return finalString;
   },
-  normalize: function(value) {
+  normalize(value) {
     return value.replace(/ /g, '').replace(/\t/g, '');
   },
-  normalizeArray: function(array) {
+  normalizeArray(array) {
     let tempArray = [];
     for (let i = 0; i < array.length; i++) {
       if (array[i] == '' || array[i].length < 2 || !array[i].match("[a-zA-Z]+")) continue;
@@ -91,7 +91,7 @@ window.Countries = {
     }
     return tempArray;
   },
-  normalizeJavaCountries: function(array) {
+  normalizeJavaCountries(array) {
     let tempArray = [];
     for (let i = 0; i < array.length; i++) {
       if (array[i] == '') continue;
