@@ -1,3 +1,7 @@
+/* globals L */
+/* globals leafletImage */
+/* globals toggleSide */
+
 window.Buttons = {
   ScreenshotButton: L.Control.extend({
     options: {
@@ -20,7 +24,7 @@ window.Buttons = {
           a.click();
           container.style.backgroundColor = 'white';
         });
-      }
+      };
       return container;
     }
   }),
@@ -36,7 +40,7 @@ window.Buttons = {
       container.style.height = '24px';
       container.onclick = () => {
         map.setView([30, 0], 2);
-      }
+      };
       return container;
     }
   }),
@@ -53,8 +57,8 @@ window.Buttons = {
       container.onclick = () => {
         toggleSide();
         map._onResize();
-      }
+      };
       return container;
     }
   })
-}
+};

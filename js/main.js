@@ -1,13 +1,13 @@
+/* globals Buttons */
+/* globals Countries */
+/* globals Boundaries */
+/* globals Codes */
+
+/* globals L */
+/* globals CodeMirror */
+
 const bringToBack = ['EU', 'FX'];
 
-const modes = {
-  blacklist: 'blacklist',
-  whitelist: 'whitelist'
-}
-const queryTypes = {
-  allExcept: 'all except',
-  only: 'only'
-}
 const questDirectory = 'https://raw.githubusercontent.com/westnordost/StreetComplete/master/app/src/main/java/de/westnordost/streetcomplete/quests/';
 const placeholder = 'all except\n' +
   '"NL", // https://forum.openstreetmap.org/viewtopic.php?id=60356\n' +
@@ -43,7 +43,7 @@ map.addControl(resetButton);
 
 const editor = CodeMirror(document.getElementById('codemirror-container'), {
   lineNumbers: true,
-  value: hasURLParams() ? "" : placeholder,
+  value: hasURLParams() ? '' : placeholder,
   placeholder: 'Input all ISO-3166 country codes seperated by a comma or line break (comments are allowed too)',
   theme: 'material',
   mode: 'javascript',
@@ -51,14 +51,14 @@ const editor = CodeMirror(document.getElementById('codemirror-container'), {
   lineWrapping: true,
   smartIndent: false
 });
-editor.on('change', function(cm, change) {
+editor.on('change', () => {
   updateMap();
 });
 
 init();
 updateMap();
 
-//Get the URL params and use them to e.g. show the data on the map
+// Get the URL params and use them to e.g. show the data on the map
 function init() {
   const url = new URL(window.location.href);
 
@@ -71,56 +71,69 @@ function init() {
     updateMap();
   }
   if (file) {
-    request(file, value => {
+    request(file).then(value => {
       editor.setValue(value);
       updateMap();
     });
   }
   if (java) {
     let url = java;
-    if (!isUrl(java)) url = questDirectory + java;
-    request(url, value => {
+    if (!isUrl(java)) {
+      url = questDirectory + java;
+    }
+    request(url).then(value => {
       editor.setValue(Countries.parseJava(value));
       updateMap();
     });
   }
 }
 
-function request(url, callback) {
-  const http = new XMLHttpRequest();
-  http.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      callback(http.responseText);
-    }
-  };
-  http.open('GET', url, true);
-  http.send();
+function request(url) {
+  return new Promise((resolve, reject) => {
+    const http = new XMLHttpRequest();
+    http.onreadystatechange = function() {
+      if (this.readyState === 4) {
+        if (this.status === 200) {
+          resolve(http.responseText);
+        } else {
+          reject(http.responseText);
+        }
+      }
+    };
+    http.open('GET', url, true);
+    http.send();
+  });
 }
 
 function updateMap() {
-  if (geoJSONLayer) map.removeLayer(geoJSONLayer);
+  if (geoJSONLayer) {
+    map.removeLayer(geoJSONLayer);
+  }
   const input = Countries.parse(editor.getValue());
   const countries = input.countries;
-  const comments = input.comments;
+  // const comments = input.comments;
   const mode = input.mode;
 
-  geoJSONLayer = L.geoJSON(boundaries, {
-    style: function(feature) {
+  geoJSONLayer = L.geoJSON(Boundaries, {
+    style(feature) {
       const countryCode = getCountryCode(feature.properties);
       if (countries.includes(countryCode)) {
-        if (mode == modes.blacklist) return getStyle('red');
-        else return getStyle('green');
+        if (mode === Countries.modes.blacklist) {
+          return getStyle('red');
+        } else {
+          return getStyle('green');
+        }
       } else {
         return getStyle('invisible');
       }
     },
-    filter: function(feature) {
+    filter(feature) {
       const countryCode = getCountryCode(feature.properties);
       return countryCode != null && !bringToBack.includes(countryCode);
     },
-    onEachFeature: function(feature, layer) {
+    onEachFeature(feature, layer) {
       layer.on({
-        click: function(e) {
+        click(e) {
           const countryCode = getCountryCode(e.target.feature.properties);
           const index = input.countries.indexOf(countryCode);
           if (index > -1) {
@@ -141,16 +154,24 @@ function updateMap() {
 function updateText(input) {
   let finalString = '';
 
-  if (input.mode == modes.blacklist) finalString += 'Blacklisted in ';
-  else if (input.mode == modes.whitelist) finalString += 'Whitelisted in ';
+  if (input.mode === Countries.modes.blacklist) {
+    finalString += 'Blacklisted in ';
+  } else if (input.mode === Countries.modes.whitelist) {
+    finalString += 'Whitelisted in ';
+  }
 
   for (let i = 0; i < input.countries.length; i++) {
-    finalString += codes[input.countries[i]];
-    if (input.countries.indexOf(input.countries[i]) != input.countries.length - 1) finalString += ', ';
+    finalString += Codes[input.countries[i]];
+    if (input.countries.indexOf(input.countries[i]) !== input.countries.length - 1) {
+      finalString += ', ';
+    }
   }
   const countryList = document.getElementById('country-list');
-  if (input.countries.length > 0) countryList.innerHTML = finalString;
-  else countryList.innerHTML = '';
+  if (input.countries.length > 0) {
+    countryList.innerHTML = finalString;
+  } else {
+    countryList.innerHTML = '';
+  }
 }
 
 function getStyle(color) {
@@ -174,7 +195,7 @@ function getStyle(color) {
       fillOpacity: 0,
       weight: 0
     }
-  }
+  };
   return style[color];
 }
 
@@ -183,7 +204,7 @@ function getCountryCode(tags) {
 }
 
 function isUrl(url) {
-  return /^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/.test(url);
+  return /^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/.test(url); // eslint-disable-line no-useless-escape
 }
 
 function hasURLParams() {
@@ -192,11 +213,13 @@ function hasURLParams() {
 }
 
 function hasClass(element, cls) {
-  if ((`${element.className}`).replace(/[\n\t]/g, " ").includes(cls)) return true;
+  if ((`${element.className}`).replace(/[\n\t]/g, ' ').includes(cls)) {
+    return true;
+  }
   return false;
 }
 
-function toggleSide() {
+function toggleSide() { // eslint-disable-line no-unused-vars
   const mapContainer = document.getElementById('map');
 
   if (hasClass(mapContainer, 's8')) {

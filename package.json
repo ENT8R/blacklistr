@@ -4,8 +4,10 @@
   "description": "A website for visualizing country specific data",
   "scripts": {
     "start": "python -m SimpleHTTPServer",
-    "build": "python exportJosmBoundariesToGeoJson.py && node js/build.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "python exportJosmBoundariesToGeoJson.py && node js/build.js && npm run minify",
+    "minify": "minify assets/codes.js --out-file assets/codes.min.js",
+    "lint": "eslint js/**.js",
+    "test": "npm run lint"
   },
   "author": "ENT8R <info.ent8r@gmail.com>",
   "license": "GPL-3.0"
