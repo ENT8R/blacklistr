@@ -1,13 +1,14 @@
 {
     "root": true,
     "parserOptions": {
-        "ecmaVersion": 2017,
+        "ecmaVersion": 6,
         "sourceType": "script",
         "ecmaFeatures": {
             "impliedStrict": true
         }
     },
     "env": {
+        "node": "true",
         "browser": true,
         "es6": true
     },

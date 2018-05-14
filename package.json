@@ -4,10 +4,21 @@
   "description": "A website for visualizing country specific data",
   "scripts": {
     "start": "python -m SimpleHTTPServer",
-    "build": "python exportJosmBoundariesToGeoJson.py && node js/build.js && npm run minify",
+    "build": "python exportJosmBoundariesToGeoJson.py && node js/build.js && npm run minify && npm run browserify",
+    "browserify": "browserify js/main.js -o js/bundle.js",
     "minify": "minify assets/codes.js --out-file assets/codes.min.js",
     "lint": "eslint js/**.js",
     "test": "npm run lint"
+  },
+  "devDependencies": {
+    "browserify": "^16.2.2",
+    "chai": "^4.1.2",
+    "eslint": "^4.19.1",
+    "mocha": "^5.1.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ENT8R/blacklistr.git"
   },
   "author": "ENT8R <info.ent8r@gmail.com>",
   "license": "GPL-3.0"

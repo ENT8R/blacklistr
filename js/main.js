@@ -1,10 +1,10 @@
-/* globals Buttons */
-/* globals Countries */
-/* globals Boundaries */
-/* globals Codes */
-
 /* globals L */
 /* globals CodeMirror */
+
+const Countries = require('./countries.js');
+const Buttons = require('./buttons.js');
+const Boundaries = require('../assets/boundaries.js');
+const Codes = require('../assets/codes.min.js');
 
 const bringToBack = ['EU', 'FX'];
 
@@ -17,8 +17,8 @@ const placeholder = 'all except\n' +
 
 let geoJSONLayer;
 
-const screenshotButton = new Buttons.ScreenshotButton();
-const resetButton = new Buttons.ResetButton();
+const screenshotButton = new Buttons.Screenshot();
+const resetButton = new Buttons.Reset();
 
 const map = L.map('map', {
   minZoom: 2,
@@ -37,7 +37,7 @@ L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x
   maxZoom: 19
 }).addTo(map);
 
-map.addControl(new Buttons.HideButton());
+map.addControl(new Buttons.Hide());
 map.addControl(screenshotButton);
 map.addControl(resetButton);
 
@@ -212,14 +212,7 @@ function hasURLParams() {
   return url.searchParams.get('data') != null || url.searchParams.get('file') != null || url.searchParams.get('java') != null;
 }
 
-function hasClass(element, cls) {
-  if ((`${element.className}`).replace(/[\n\t]/g, ' ').includes(cls)) {
-    return true;
-  }
-  return false;
-}
-
-function toggleSide() { // eslint-disable-line no-unused-vars
+function toggleSide(map) {
   const mapContainer = document.getElementById('map');
 
   if (hasClass(mapContainer, 's8')) {
@@ -235,3 +228,12 @@ function toggleSide() { // eslint-disable-line no-unused-vars
   }
   editor.refresh();
 }
+
+function hasClass(element, cls) {
+  if ((`${element.className}`).replace(/[\n\t]/g, ' ').includes(cls)) {
+    return true;
+  }
+  return false;
+}
+
+exports.toggleSide = toggleSide;

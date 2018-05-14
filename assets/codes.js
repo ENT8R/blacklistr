@@ -1,4 +1,4 @@
-window.Codes = {
+module.exports = {
   'AF': 'Afghanistan',
   'AL': 'Albania',
   'DZ': 'Algeria',
