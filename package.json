@@ -5,16 +5,19 @@
   "scripts": {
     "start": "python -m SimpleHTTPServer",
     "build": "python exportJosmBoundariesToGeoJson.py && node js/build.js && npm run minify && npm run browserify",
-    "browserify": "browserify js/main.js -o js/bundle.js",
+    "browserify": "browserify js/main.js | uglifyjs > js/main.min.js",
     "minify": "minify assets/codes.js --out-file assets/codes.min.js",
     "lint": "eslint js/**.js",
-    "test": "npm run lint"
+    "mocha": "mocha",
+    "test": "npm run lint && npm run mocha"
   },
   "devDependencies": {
     "browserify": "^16.2.2",
     "chai": "^4.1.2",
     "eslint": "^4.19.1",
-    "mocha": "^5.1.1"
+    "mocha": "^5.1.1",
+    "uglify-es": "^3.3.9",
+    "uglify-js": "^3.3.25"
   },
   "repository": {
     "type": "git",

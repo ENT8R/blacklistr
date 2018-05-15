@@ -25,12 +25,12 @@ function parse(input) {
   }
 
   for (let i = 0; i < lines.length; i++) {
-    // Filter out lines that start with comments
+    // filter out lines that start with comments or which don't contain any content
     if (lines[i].startsWith('//') || lines[i] === '' || lines[i] === '\n') {
       continue;
     }
 
-    // Set the mode if it is not set yet
+    // set the mode if it is not set yet
     if (!parsed.mode) {
       if (lines[i].startsWith(queryTypes.allExcept)) {
         parsed.mode = modes.blacklist;
@@ -102,11 +102,14 @@ function stringify(input) {
   }
 
   for (let i = 0; i < input.countries.length; i++) {
-    const country = `"${input.countries[i]}"`;
-    const comments = input.comments[`${country}`];
-    finalString += `${country},`;
-    if (comments) {
-      finalString += ` // ${comments}\n`;
+    const country = `${input.countries[i]}`;
+    const comment = input.comments[`${country}`];
+    finalString += `"${country}"`;
+    if (i !== input.countries.length - 1) {
+      finalString += ',';
+    }
+    if (comment) {
+      finalString += ` // ${comment}\n`;
     }
   }
 
@@ -114,7 +117,7 @@ function stringify(input) {
 }
 
 function normalize(value) {
-  return value.replace(/ /g, '').replace(/\t/g, '');
+  return value.replace(/ /g, '').replace(/\t/g, '').replace(/"/g, '');
 }
 
 function normalizeArray(array) {

@@ -5,15 +5,13 @@ const Countries = require('./countries.js');
 const Buttons = require('./buttons.js');
 const Boundaries = require('../assets/boundaries.js');
 const Codes = require('../assets/codes.min.js');
+const placeholder = require('../assets/placeholder.js');
 
-const bringToBack = ['EU', 'FX'];
-
-const questDirectory = 'https://raw.githubusercontent.com/westnordost/StreetComplete/master/app/src/main/java/de/westnordost/streetcomplete/quests/';
-const placeholder = 'all except\n' +
-  '"NL", // https://forum.openstreetmap.org/viewtopic.php?id=60356\n' +
-  '"DK", // https://lists.openstreetmap.org/pipermail/talk-dk/2017-November/004898.html\n' +
-  '"NO", // https://forum.openstreetmap.org/viewtopic.php?id=60357\n' +
-  '"CZ", // https://lists.openstreetmap.org/pipermail/talk-cz/2017-November/017901.html';
+const config = {
+  // see https://github.com/ENT8R/blacklistr/issues/18 for more information
+  bringToBack: ['EU', 'FX', 'AU-NSW'],
+  questDirectory: 'https://raw.githubusercontent.com/westnordost/StreetComplete/master/app/src/main/java/de/westnordost/streetcomplete/quests/'
+};
 
 let geoJSONLayer;
 
@@ -79,7 +77,7 @@ function init() {
   if (java) {
     let url = java;
     if (!isUrl(java)) {
-      url = questDirectory + java;
+      url = config.questDirectory + java;
     }
     request(url).then(value => {
       editor.setValue(Countries.parseJava(value));
@@ -129,7 +127,7 @@ function updateMap() {
     },
     filter(feature) {
       const countryCode = getCountryCode(feature.properties);
-      return countryCode != null && !bringToBack.includes(countryCode);
+      return countryCode != null && !config.bringToBack.includes(countryCode);
     },
     onEachFeature(feature, layer) {
       layer.on({
