@@ -149,8 +149,8 @@ def convert_relations(relations):
 			geometries.append(multipoly)
 	return geometries
 
-source_file_name = "assets/boundaries.osm"
-target_file_name = "assets/boundaries.geojson"
+source_file_name = "assets/boundaries/josm/josm.osm"
+target_file_name = "assets/boundaries/josm/josm.geojson"
 
 ways, relations = read(source_file_name)
 geometries = convert_ways(ways) + convert_relations(relations)

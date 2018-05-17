@@ -3,7 +3,8 @@
 
 const Countries = require('./countries.js');
 const Buttons = require('./buttons.js');
-const Boundaries = require('../assets/boundaries.js');
+const Settings = require('./settings.js');
+
 const Codes = require('../assets/codes.min.js');
 const placeholder = require('../assets/placeholder.js');
 
@@ -17,6 +18,9 @@ let geoJSONLayer;
 
 const screenshotButton = new Buttons.Screenshot();
 const resetButton = new Buttons.Reset();
+const settingsButton = new Buttons.Settings();
+
+Settings.init();
 
 const map = L.map('map', {
   minZoom: 2,
@@ -38,6 +42,7 @@ L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x
 map.addControl(new Buttons.Hide());
 map.addControl(screenshotButton);
 map.addControl(resetButton);
+map.addControl(settingsButton);
 
 const editor = CodeMirror(document.getElementById('codemirror-container'), {
   lineNumbers: true,
@@ -111,8 +116,9 @@ function updateMap() {
   const countries = input.countries;
   // const comments = input.comments;
   const mode = input.mode;
+  const boundaries = Settings.getBoundaries();
 
-  geoJSONLayer = L.geoJSON(Boundaries, {
+  geoJSONLayer = L.geoJSON(boundaries, {
     style(feature) {
       const countryCode = getCountryCode(feature.properties);
       if (countries.includes(countryCode)) {
@@ -218,11 +224,13 @@ function toggleSide(map) {
     mapContainer.classList.add('s12');
     map.removeControl(screenshotButton);
     map.removeControl(resetButton);
+    map.removeControl(settingsButton);
   } else {
     mapContainer.classList.remove('s12');
     mapContainer.classList.add('s8');
     map.addControl(screenshotButton);
     map.addControl(resetButton);
+    map.addControl(settingsButton);
   }
   editor.refresh();
 }
@@ -235,3 +243,4 @@ function hasClass(element, cls) {
 }
 
 exports.toggleSide = toggleSide;
+exports.updateMap = updateMap;

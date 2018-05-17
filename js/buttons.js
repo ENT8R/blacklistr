@@ -44,6 +44,34 @@ const Reset = L.Control.extend({
   }
 });
 
+const Settings = L.Control.extend({
+  options: {
+    position: 'topleft'
+  },
+  onAdd() {
+    const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+    container.style.cursor = 'pointer';
+    container.style.backgroundColor = 'white';
+    container.innerHTML = '<img alt="open settings" src="images/settings.svg"></img>';
+    container.style.height = '24px';
+    container.onclick = () => {
+      const modal = document.getElementById('settings');
+      const close = document.getElementsByClassName('close')[0];
+      
+      modal.style.display = 'block';
+      close.onclick = function() {
+        modal.style.display = 'none';
+      };
+      window.onclick = function(event) {
+        if (event.target === modal) {
+          modal.style.display = 'none';
+        }
+      };
+    };
+    return container;
+  }
+});
+
 const Hide = L.Control.extend({
   options: {
     position: 'topright'
@@ -65,3 +93,4 @@ const Hide = L.Control.extend({
 exports.Screenshot = Screenshot;
 exports.Reset = Reset;
 exports.Hide = Hide;
+exports.Settings = Settings;

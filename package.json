@@ -4,7 +4,7 @@
   "description": "A website for visualizing country specific data",
   "scripts": {
     "start": "python -m SimpleHTTPServer",
-    "build": "python exportJosmBoundariesToGeoJson.py && node js/build.js && npm run minify && npm run browserify",
+    "build": "python assets/boundaries/josm/exportJosmBoundariesToGeoJson.py && node js/build.js && npm run minify && npm run browserify",
     "browserify": "browserify js/main.js | uglifyjs > js/main.min.js",
     "minify": "minify assets/codes.js --out-file assets/codes.min.js",
     "lint": "eslint js/**.js",
