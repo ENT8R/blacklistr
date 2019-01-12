@@ -17,19 +17,19 @@ All country codes should be a valid [ISO 3166-1 alpha-2](https://en.wikipedia.or
 
 To load the data from a string use the endpoint `/?data={data}`
 
-Example: [`/?data=all except "NL", "DK", "NO", "CZ"`](https://ent8r.github.io/blacklistr/?data=all%20except%0A%22NL%22,%20%22DK%22,%20%22NO%22,%20%22CZ%22)
+Example: [`/?data=all except "NL", "DK", "NO", "CZ", "IT"`](https://ent8r.github.io/blacklistr/?data=all%20except%0A%22NL%22,%20%22DK%22,%20%22NO%22,%20%22CZ%22,%20%22IT%22)
 
 #### Load data from a file
 
 To load the data from a file use the endpoint `/?file={file_name}`
 
-Example: [`/?file=https://ent8r.github.io/blacklistr/assets/test.js`](https://ent8r.github.io/blacklistr/?file=https://ent8r.github.io/blacklistr/assets/test.js)
+Example: [`/?file=https://ent8r.github.io/blacklistr/assets/test.json`](https://ent8r.github.io/blacklistr/?file=https://ent8r.github.io/blacklistr/assets/test.json)
 
 #### Load StreetComplete data
 
-To load the data used by [StreetComplete](https://github.com/westnordost/StreetComplete/) use the endpoint `/?java={questDirectory/questName}`
+To load the data used by [StreetComplete](https://github.com/westnordost/StreetComplete/) use the endpoint `/?streetcomplete={questDirectory/questName}`
 
-Example: [`/?java=housenumber/AddHousenumber.java`](https://ent8r.github.io/blacklistr/?java=housenumber/AddHousenumber.java)
+Example: [`/?streetcomplete=housenumber/AddHousenumber.kt`](https://ent8r.github.io/blacklistr/?streetcomplete=housenumber/AddHousenumber.kt)
 
 ### Found an issue?
 - Just report it in the [issue section](https://github.com/ENT8R/blacklistr/issues/) of this repository

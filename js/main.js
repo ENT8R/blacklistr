@@ -67,7 +67,7 @@ function init() {
 
   const data = url.searchParams.get('data');
   const file = url.searchParams.get('file');
-  const java = url.searchParams.get('java');
+  const streetcomplete = url.searchParams.get('streetcomplete');
 
   if (data) {
     editor.setValue(data);
@@ -79,13 +79,18 @@ function init() {
       updateMap();
     });
   }
-  if (java) {
-    let url = java;
-    if (!isUrl(java)) {
-      url = config.questDirectory + java;
+  if (streetcomplete) {
+    let url = streetcomplete;
+    if (!isUrl(streetcomplete)) {
+      url = config.questDirectory + streetcomplete;
     }
     request(url).then(value => {
-      editor.setValue(Countries.parseJava(value));
+      const ext = url.split('.').pop();
+      if (ext === 'java') {
+        editor.setValue(Countries.streetcomplete(value, true));
+      } else if (ext === 'kt') {
+        editor.setValue(Countries.streetcomplete(value, false));
+      }
       updateMap();
     });
   }
@@ -213,7 +218,7 @@ function isUrl(url) {
 
 function hasURLParams() {
   const url = new URL(window.location.href);
-  return url.searchParams.get('data') != null || url.searchParams.get('file') != null || url.searchParams.get('java') != null;
+  return url.searchParams.get('data') != null || url.searchParams.get('file') != null || url.searchParams.get('streetcomplete') != null;
 }
 
 function toggleSide(map) {

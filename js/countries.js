@@ -56,8 +56,8 @@ function parse(input) {
   return parsed;
 }
 
-// parses a java file (used by StreetComplete)
-function parseJava(input) {
+// parses a file used by StreetComplete
+function streetcomplete(input, java) {
   let mode;
 
   if (input.includes('Countries.noneExcept')) {
@@ -65,30 +65,31 @@ function parseJava(input) {
   } else if (input.includes('Countries.allExcept')) {
     mode = 'Countries.allExcept';
   } else {
-    throw new TypeError('This file is not valid and contains no black- or whitelist!');
+    throw new TypeError('This file is not valid because it contains no black- or whitelist!');
   }
 
-  const allAfterMethod = input.split(mode)[1];
-  const allInsideMethod = allAfterMethod.split('}')[0];
-  const countries = normalizeJavaCountries(allInsideMethod.split('{')[1].split('\n'));
-
-  let finalString = '';
-
-  if (mode.includes('noneExcept')) {
-    finalString += queryTypes.only;
+  let regex;
+  if (java) {
+    regex = new RegExp(/Countries\.(?:noneExcept|allExcept)\([\s\S]*?\{([\s\S]*?)?\}\)/);
   } else {
-    finalString += queryTypes.allExcept;
+    regex = new RegExp(/Countries\.(?:noneExcept|allExcept)\(([\s\S]*?)\)/);
+    // comments have to be removed because they might contain a closing bracket
+    input = input.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '');
   }
-  finalString += '\n';
+
+  const countries = normalizeInputCountries(regex.exec(input)[1].trim().split('\n'));
+
+  let r = mode.includes('noneExcept') ? queryTypes.only : queryTypes.allExcept;
+  r += '\n';
 
   for (let i = 0; i < countries.length; i++) {
     if (countries[i] === '') {
       continue;
     }
-    finalString += countries[i];
-    finalString += '\n';
+    r += countries[i];
+    r += '\n';
   }
-  return finalString;
+  return r;
 }
 
 // stringify a given input object
@@ -131,18 +132,18 @@ function normalizeArray(array) {
   return tempArray;
 }
 
-function normalizeJavaCountries(array) {
-  const tempArray = [];
-  for (let i = 0; i < array.length; i++) {
-    if (array[i] === '') {
+function normalizeInputCountries(a) {
+  const r = [];
+  for (let i = 0; i < a.length; i++) {
+    if (a[i] === '') {
       continue;
     }
-    tempArray.push(array[i].replace(/\/\//, '//').replace(/\t/g, ''));
+    r.push(a[i].replace(/\/\//, '//').replace(/\t/g, '').trim());
   }
-  return tempArray;
+  return r;
 }
 
 exports.modes = modes;
 exports.parse = parse;
-exports.parseJava = parseJava;
+exports.streetcomplete = streetcomplete;
 exports.stringify = stringify;
