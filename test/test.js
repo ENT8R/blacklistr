@@ -5,7 +5,7 @@ const fs = require('fs');
 
 const { expect } = require('chai');
 
-const Countries = require('../js/countries.js');
+const Countries = require('../js/src/countries.js');
 
 describe('Countries', () => {
   describe('#parse()', () => {
@@ -35,7 +35,7 @@ describe('Countries', () => {
 
     describe('#streetcomplete(kotlin, false)', () => {
       const kotlin = fs.readFileSync('./test/assets/streetcomplete/kotlin/housenumber.kt', 'utf-8');
-      
+
       it('should return the expected input when parsing a Kotlin file', () => {
         const result = Countries.streetcomplete(kotlin, false);
         const expected = fs.readFileSync('./test/assets/results/streetcomplete/kotlin/housenumber.json', 'utf-8');

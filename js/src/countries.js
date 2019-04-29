@@ -143,7 +143,9 @@ function normalizeInputCountries(a) {
   return r;
 }
 
-exports.modes = modes;
-exports.parse = parse;
-exports.streetcomplete = streetcomplete;
-exports.stringify = stringify;
+module.exports = {
+  modes,
+  parse,
+  streetcomplete,
+  stringify
+};

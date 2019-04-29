@@ -57,7 +57,7 @@ const Settings = L.Control.extend({
     container.onclick = () => {
       const modal = document.getElementById('settings');
       const close = document.getElementsByClassName('close')[0];
-      
+
       modal.style.display = 'block';
       close.onclick = function() {
         modal.style.display = 'none';
@@ -76,21 +76,22 @@ const Hide = L.Control.extend({
   options: {
     position: 'topright'
   },
-  onAdd(map) {
+  onAdd() {
     const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
     container.style.cursor = 'pointer';
     container.style.backgroundColor = 'white';
     container.innerHTML = '<img alt="hide editor" src="images/keyboard-close.svg"></img>';
     container.style.height = '24px';
     container.onclick = () => {
-      require('./main.js').toggleSide(map);
-      map._onResize();
+      document.querySelector('main').dispatchEvent(new Event('toggle-side'));
     };
     return container;
   }
 });
 
-exports.Screenshot = Screenshot;
-exports.Reset = Reset;
-exports.Hide = Hide;
-exports.Settings = Settings;
+module.exports = {
+  Screenshot,
+  Reset,
+  Hide,
+  Settings
+};

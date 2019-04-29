@@ -5,8 +5,7 @@ const Countries = require('./countries.js');
 const Buttons = require('./buttons.js');
 const Settings = require('./settings.js');
 
-const Codes = require('../assets/codes.min.js');
-const placeholder = require('../assets/placeholder.js');
+const Codes = require('../../assets/codes.json');
 
 const config = {
   // see https://github.com/ENT8R/blacklistr/issues/18 for more information
@@ -34,7 +33,7 @@ const map = L.map('map', {
 }).setView([30, 0], 2);
 
 L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
-  attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+  attribution: '&copy; <a href="https://www.osm.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attribution/">CartoDB</a>',
   minZoom: 2,
   maxZoom: 19
 }).addTo(map);
@@ -46,7 +45,7 @@ map.addControl(settingsButton);
 
 const editor = CodeMirror(document.getElementById('codemirror-container'), {
   lineNumbers: true,
-  value: hasURLParams() ? '' : placeholder,
+  value: hasURLParams() ? '' : require('../../assets/placeholder.txt').default,
   placeholder: 'Input all ISO-3166 country codes seperated by a comma or line break (comments are allowed too)',
   theme: 'material',
   mode: 'javascript',
@@ -58,11 +57,18 @@ editor.on('change', () => {
   updateMap();
 });
 
+document.getElementById('map').addEventListener('change-boundaries', () => {
+  updateMap();
+});
+document.querySelector('main').addEventListener('toggle-side', () => {
+  toggleSide();
+});
+
 init();
 updateMap();
 
 // Get the URL params and use them to e.g. show the data on the map
-function init() {
+async function init() {
   const url = new URL(window.location.href);
 
   const data = url.searchParams.get('data');
@@ -73,44 +79,28 @@ function init() {
     editor.setValue(data);
     updateMap();
   }
+
   if (file) {
-    request(file).then(value => {
-      editor.setValue(value);
-      updateMap();
-    });
+    editor.setValue(await fetch(url).then(response => response.text()));
+    updateMap();
   }
+
   if (streetcomplete) {
     let url = streetcomplete;
     if (!isUrl(streetcomplete)) {
       url = config.questDirectory + streetcomplete;
     }
-    request(url).then(value => {
-      const ext = url.split('.').pop();
-      if (ext === 'java') {
-        editor.setValue(Countries.streetcomplete(value, true));
-      } else if (ext === 'kt') {
-        editor.setValue(Countries.streetcomplete(value, false));
-      }
-      updateMap();
-    });
-  }
-}
 
-function request(url) {
-  return new Promise((resolve, reject) => {
-    const http = new XMLHttpRequest();
-    http.onreadystatechange = function() {
-      if (this.readyState === 4) {
-        if (this.status === 200) {
-          resolve(http.responseText);
-        } else {
-          reject(http.responseText);
-        }
-      }
-    };
-    http.open('GET', url, true);
-    http.send();
-  });
+    const content = await fetch(url).then(response => response.text());
+
+    const ext = url.split('.').pop();
+    if (ext === 'java') {
+      editor.setValue(Countries.streetcomplete(content, true));
+    } else if (ext === 'kt') {
+      editor.setValue(Countries.streetcomplete(content, false));
+    }
+    updateMap();
+  }
 }
 
 function updateMap() {
@@ -221,22 +211,21 @@ function hasURLParams() {
   return url.searchParams.get('data') != null || url.searchParams.get('file') != null || url.searchParams.get('streetcomplete') != null;
 }
 
-function toggleSide(map) {
-  const mapContainer = document.getElementById('map');
-
-  if (hasClass(mapContainer, 's8')) {
-    mapContainer.classList.remove('s8');
-    mapContainer.classList.add('s12');
+function toggleSide() {
+  if (hasClass(document.getElementById('map'), 's8')) {
+    document.getElementById('map').classList.remove('s8');
+    document.getElementById('map').classList.add('s12');
     map.removeControl(screenshotButton);
     map.removeControl(resetButton);
     map.removeControl(settingsButton);
   } else {
-    mapContainer.classList.remove('s12');
-    mapContainer.classList.add('s8');
+    document.getElementById('map').classList.remove('s12');
+    document.getElementById('map').classList.add('s8');
     map.addControl(screenshotButton);
     map.addControl(resetButton);
     map.addControl(settingsButton);
   }
+  map._onResize();
   editor.refresh();
 }
 
@@ -246,6 +235,3 @@ function hasClass(element, cls) {
   }
   return false;
 }
-
-exports.toggleSide = toggleSide;
-exports.updateMap = updateMap;
