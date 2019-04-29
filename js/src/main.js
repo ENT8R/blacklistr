@@ -81,7 +81,7 @@ async function init() {
   }
 
   if (file) {
-    editor.setValue(await fetch(url).then(response => response.text()));
+    editor.setValue(await fetch(file).then(response => response.text()));
     updateMap();
   }
 
