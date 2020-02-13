@@ -2,33 +2,34 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="description" content="A website for visualizing country specific data">
   <meta name="keywords" content="OSM, OpenStreetMap, blacklist, blacklistr">
   <meta name="author" content="ENT8R">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#263238">
-  
-  <meta http-equiv="Content-Security-Policy" content="script-src 'self' https://unpkg.com;
-                style-src 'self' https://unpkg.com;
-                img-src 'self' https://*.global.ssl.fastly.net data: image/gif;
-                font-src https://raw.githubusercontent.com;
-                connect-src *;">
+
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self';
+                 script-src 'self' https://unpkg.com;
+                 style-src 'self' https://unpkg.com;
+                 img-src 'self' https://*.global.ssl.fastly.net data:;
+                 connect-src *;">
 
   <title>blacklistr</title>
 
   <link rel="stylesheet"
-        href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
-        integrity="sha384-BF7C732iE6WuqJMhUnTNJJLVvW1TIP87P2nMDY7aN2j2EJFWIaqK89j3WlirhFZU"
+        href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+        integrity="sha384-eS4bw6aEvhCSXWGP85ANR/N8isWKzT7P36NvcuTJGkrj6wsbxLVpXslrNXYHyseD"
         crossorigin="anonymous">
 
   <link rel="stylesheet"
-        href="https://unpkg.com/codemirror@5.46.0/lib/codemirror.css"
-        integrity="sha384-rTt9i9SnVCkukyC4WSJmDVMachnmXt3NchukWtR1miRFWpcgnyeOFxq2FBzsKltl"
+        href="https://unpkg.com/codemirror@5.51.0/lib/codemirror.css"
+        integrity="sha384-W+l0/wPg6VnknJKJ7Zt/4ksAi7+mEa5foJj4Q103tmWYbcmjLQl5omQo4QxEHg9k"
         crossorigin="anonymous">
   <link rel="stylesheet"
-        href="https://unpkg.com/codemirror@5.46.0/theme/material.css"
-        integrity="sha384-uTAZPxyjJ9jA4LktZ471eVMrhJeecKRbS5vKeouA9i28bDjfX2uP2Qa2LBh7Sx/S"
+        href="https://unpkg.com/codemirror@5.51.0/theme/material.css"
+        integrity="sha384-wNa2J0ZpPuJd3IJ0weulKqyfUNeyLt3d0IfkrexmFJH96WvXfuxZKzTRys27GH9J"
         crossorigin="anonymous">
 
   <link rel="stylesheet" href="css/main.css">
@@ -39,11 +40,10 @@
 
 <body>
   <main>
-
     <noscript>
       Your browser does not support JavaScript which is needed for this tool.
       If you use any blocker like NoScript, disable it if you want to use this website!
-      If you want to convince yourself that there is no code which uses your personal data,
+      If you want to convince yourself that there is no code which tracks your personal data,
       you can view the souce code on <a href="https://github.com/ENT8R/blacklistr">Github</a> before visiting this site.
     </noscript>
 
@@ -63,33 +63,38 @@
       <div class="modal-content">
         <span class="close">&times;</span>
         <div>
-          <p>Boundaries</p>
-          <select id="boundaries">
-            <option value="josm">JOSM (contains more countries but looks a little bit ugly)</option>
-            <option value="naturalearth">NaturalEarth (contains nearly all countries on the earth and looks prettier)</option>
-          </select>
+          <h3>Boundaries</h3>
+          <div>
+            <input id="boundaries-josm" type="radio" name="boundaries" value="josm">
+            <label for="boundaries-josm">JOSM (uglier, includes some subdivisions)</label>
+            <br>
+            <input id="boundaries-naturalearth" type="radio" name="boundaries" value="naturalearth">
+            <label for="boundaries-naturalearth">NaturalEarth (prettier, does not include subdivisions)</label>
+            <br>
+            <input id="boundaries-geomaps" type="radio" name="boundaries" value="geomaps">
+            <label for="boundaries-geomaps">GeoMaps (more detailed, does not include subdivisions)</label>
+          </div>
         </div>
       </div>
     </div>
 
   </main>
 
-  <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
-          integrity="sha384-jV/9OyZzm1ZMHG4pfYVMmnnCtVUlZdWgZ8mNSX3CPFM4HSK2KUSP8xzLljzMDkWd"
+  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+          integrity="sha384-wKOriz2x8/bF1D9t6PuKhSpxfhHeVi9huvyuxJrrShSJpi5+rmRIsM90UuWbdAYJ"
           crossorigin="anonymous"></script>
   <script src="https://unpkg.com/leaflet-image@0.4.0/leaflet-image.js"
           integrity="sha384-Cl2KSaehTGkoEiw07k3L/nCCwvF6tB3BcWgb83eHZUp2oPDI3qSKJUypvhoB66Gq"
           crossorigin="anonymous"></script>
 
-  <script src="https://unpkg.com/codemirror@5.46.0/lib/codemirror.js"
-          integrity="sha384-fT/CVBXAPR+CgcVmFII1a4VykqGQMZkFwiN3ySLuM0DBiEu+R+LOunnSkHS/BbGc"
+  <script src="https://unpkg.com/codemirror@5.51.0/lib/codemirror.js"
+          integrity="sha384-02xhusEpWVGXrSdPIAiETXMZLvQJ59h4URK+DfszDUty7YGzoLwt94BhTg/wcvBn"
           crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/codemirror@5.46.0/mode/javascript/javascript.js"
-          integrity="sha384-1INCxGCu62NZAmkhvE/DWEQjchErOcpldPhESAZ1MXDyKK8Y+QfdxXJq+4Tsc78V"
+  <script src="https://unpkg.com/codemirror@5.51.0/mode/javascript/javascript.js"
+          integrity="sha384-L+rGAN8JN7NBbEeVfMKyHAJqWIpjbZnIAzjOVJvHc1rtB3Lr8LJCo2mVkz1HcaQt"
           crossorigin="anonymous"></script>
 
-  <script src="js/dist/main.min.js"></script>
+  <script src="dist/js/main.min.js"></script>
 
 </body>
-
 </html>

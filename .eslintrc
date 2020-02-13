@@ -1,64 +1,57 @@
 {
-    "root": true,
-    "parserOptions": {
-        "ecmaVersion": 2017,
-        "sourceType": "script",
-        "ecmaFeatures": {
-            "impliedStrict": true
-        }
-    },
-    "env": {
-        "node": "true",
-        "browser": true,
-        "es6": true
-    },
-    "extends": ["eslint:recommended"],
-    "rules": {
-        // basic rules
-        "semi": 1,
-        "semi-style": 2,
-        "semi-spacing": 1,
-        "camelcase": 2,
-        "quotes": ["warn", "single", {
-            "avoidEscape": true,
-            "allowTemplateLiterals": false
-        }],
-        "brace-style": 2,
-        "indent": ["error", 2],
+  "root": true,
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module"
+  },
+  "env": {
+    "node": true,
+    "browser": true,
+    "es6": true
+  },
+  "extends": ["eslint:recommended"],
+  "rules": {
+    "semi": "warn",
+    "semi-style": "error",
+    "semi-spacing": "warn",
+    "camelcase": "error",
+    "quotes": ["warn", "single", {
+      "avoidEscape": true,
+      "allowTemplateLiterals": false
+    }],
+    "brace-style": "error",
+    "indent": ["error", 2],
+    "no-eval": "error",
+    "no-implied-eval": "error",
 
-        "no-eval": 2,
-        "no-implied-eval": 2,
+    "prefer-const": "error",
+    "no-var": "warn",
+    "prefer-arrow-callback": "warn",
+    "prefer-rest-params": "error",
+    "prefer-spread": "error",
+    "prefer-template": "warn",
+    "template-curly-spacing": "warn",
+    "symbol-description": "error",
+    "object-shorthand": "warn",
+    "prefer-promise-reject-errors": "error",
+    "prefer-destructuring": "warn",
+    "prefer-numeric-literals": "warn",
 
-        "prefer-const": 2,
-        "no-var": 1,
-        "prefer-arrow-callback": 1,
-        "prefer-rest-params": 2,
-        "prefer-spread": 2,
-        "prefer-template": 1,
-        "template-curly-spacing": 1,
-        "symbol-description": 2,
-        "object-shorthand": 1,
-        "prefer-promise-reject-errors": 2,
-
-        // additional rules
-        "no-new-object": 2,
-        "eqeqeq": ["error", "smart"],
-        "curly": ["error", "all"],
-        "dot-notation": 2,
-        "no-array-constructor": 2,
-        "no-throw-literal": 2,
-        "no-self-compare": 2,
-        "no-useless-call": 1,
-        "consistent-return": 2,
-        "spaced-comment": 1,
-        "no-multi-spaces": 1,
-        "no-new-wrappers": 2,
-        "no-script-url": 2,
-        "no-void": 1,
-        "vars-on-top": 1,
-        "yoda": ["error", "never"],
-        "require-await": 1,
-        "wrap-iife": ["error", "inside"],
-        "no-loop-func": 2
-    }
+    "no-new-object": "error",
+    "eqeqeq": ["error", "smart"],
+    "curly": ["error", "all"],
+    "dot-location": ["error", "property"],
+    "dot-notation": "error",
+    "no-array-constructor": "error",
+    "no-throw-literal": "error",
+    "no-self-compare": "error",
+    "no-useless-call": "warn",
+    "spaced-comment": "warn",
+    "no-multi-spaces": "warn",
+    "no-new-wrappers": "error",
+    "no-script-url": "error",
+    "no-void": "warn",
+    "vars-on-top": "warn",
+    "require-await": "warn"
+  }
 }

@@ -3,16 +3,17 @@ const path = require('path');
 module.exports = {
   mode: 'production',
   watch: true,
-  entry: './js/src/main.js',
+  entry: './js/main.mjs',
   output: {
-    path: path.resolve(__dirname, 'js/dist'),
-    filename: '[name].min.js',
-    chunkFilename: '[name].min.js'
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'js/[name].min.js',
+    chunkFilename: 'js/[name].min.js',
+    publicPath: 'dist/'
   },
   devServer: {
     contentBase: __dirname,
     watchContentBase: true,
-    publicPath: '/',
+    publicPath: '/dist/',
     compress: true,
     port: 8000
   },
@@ -24,7 +25,7 @@ module.exports = {
       },
       {
         test: /\.geojson$/i,
-        loader: 'json-loader'
+        type: 'json',
       }
     ]
   }

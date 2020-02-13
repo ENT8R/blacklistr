@@ -1,7 +1,7 @@
 /* globals L */
 /* globals leafletImage */
 
-const Screenshot = L.Control.extend({
+export const Screenshot = L.Control.extend({
   options: {
     position: 'topleft'
   },
@@ -27,7 +27,7 @@ const Screenshot = L.Control.extend({
   }
 });
 
-const Reset = L.Control.extend({
+export const Reset = L.Control.extend({
   options: {
     position: 'topleft'
   },
@@ -44,7 +44,7 @@ const Reset = L.Control.extend({
   }
 });
 
-const Settings = L.Control.extend({
+export const Settings = L.Control.extend({
   options: {
     position: 'topleft'
   },
@@ -56,7 +56,7 @@ const Settings = L.Control.extend({
     container.style.height = '24px';
     container.onclick = () => {
       const modal = document.getElementById('settings');
-      const close = document.getElementsByClassName('close')[0];
+      const [ close ] = document.getElementsByClassName('close');
 
       modal.style.display = 'block';
       close.onclick = function() {
@@ -72,7 +72,7 @@ const Settings = L.Control.extend({
   }
 });
 
-const Hide = L.Control.extend({
+export const Hide = L.Control.extend({
   options: {
     position: 'topright'
   },
@@ -83,15 +83,8 @@ const Hide = L.Control.extend({
     container.innerHTML = '<img alt="hide editor" src="images/keyboard-close.svg"></img>';
     container.style.height = '24px';
     container.onclick = () => {
-      document.querySelector('main').dispatchEvent(new Event('toggle-side'));
+      document.body.dispatchEvent(new Event('toggle-side'));
     };
     return container;
   }
 });
-
-module.exports = {
-  Screenshot,
-  Reset,
-  Hide,
-  Settings
-};
