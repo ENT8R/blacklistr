@@ -1,7 +1,9 @@
-const externals = require('webpack-node-externals');
-
 module.exports = {
   mode: 'production',
   target: 'node',
-  externals: [externals()]
+  // Exclude modules that should not be bundled for testing
+  externals: /^(chai|fs|node-fetch)$/,
+  output: {
+    libraryTarget: 'commonjs'
+  }
 };
