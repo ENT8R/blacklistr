@@ -5,7 +5,7 @@ const osmtogeojson = require('osmtogeojson');
 const { DOMParser } = require('xmldom');
 
 const BOUNDARIES = {
-  JOSM: 'https://josm.openstreetmap.de/export/HEAD/josm/trunk/data/boundaries.osm',
+  JOSM: 'https://josm.openstreetmap.de/export/HEAD/josm/trunk/resources/data/boundaries.osm',
   NATURAL_EARTH: 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_admin_0_countries.geojson',
   GEO_MAPS: 'https://github.com/simonepri/geo-maps/releases/latest/download/countries-coastline-5km.geo.json'
 };
