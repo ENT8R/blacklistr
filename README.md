@@ -27,7 +27,7 @@ Example: [`/?file=https://ent8r.github.io/blacklistr/assets/test.json`](https://
 
 #### Load StreetComplete data
 
-To load the data used by [StreetComplete](https://github.com/westnordost/StreetComplete/) use the endpoint `/?streetcomplete={questDirectory/questName}`
+To load the data used by [StreetComplete](https://github.com/streetcomplete/StreetComplete/) use the endpoint `/?streetcomplete={questDirectory/questName}`
 
 Example: [`/?streetcomplete=housenumber/AddHousenumber.kt`](https://ent8r.github.io/blacklistr/?streetcomplete=housenumber/AddHousenumber.kt)
 
