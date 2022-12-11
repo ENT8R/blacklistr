@@ -3,30 +3,28 @@
   "version": "1.0.0",
   "description": "A website for visualizing country specific data",
   "scripts": {
-    "start": "npx webpack-dev-server",
+    "start": "npx webpack serve",
     "build": "npx webpack",
     "lint": "npx eslint js/**.mjs",
     "mocha": "npx mochapack --webpack-config webpack.config.test.js",
     "test": "npm run lint && npm run mocha"
   },
   "dependencies": {
-    "codemirror": "^5.54.0",
-    "leaflet": "^1.6.0",
+    "codemirror": "^5.65.10",
+    "leaflet": "^1.9.3",
     "leaflet-image": "^0.4.0"
   },
   "devDependencies": {
-    "@ideditor/country-coder": "^3.2.0",
-    "chai": "^4.2.0",
-    "eslint": "^7.2.0",
-    "mocha": "^8.0.1",
-    "mochapack": "^2.0.0",
-    "node-fetch": "^2.6.0",
-    "osmtogeojson": "^3.0.0-beta.4",
-    "raw-loader": "^4.0.1",
+    "@ideditor/country-coder": "^5.1.0",
+    "chai": "^4.3.7",
+    "eslint": "^8.29.0",
+    "mocha": "^10.1.0",
+    "mochapack": "^2.1.4",
+    "osmtogeojson": "^3.0.0-beta.5",
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^4.11.1",
-    "xmldom": "^0.3.0"
+    "xmldom": "^0.6.0"
   },
   "repository": {
     "type": "git",
