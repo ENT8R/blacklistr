@@ -1,6 +1,5 @@
 const fs = require('fs');
 const countryCoder = require('@ideditor/country-coder');
-const fetch = require('node-fetch');
 const osmtogeojson = require('osmtogeojson');
 const { DOMParser } = require('xmldom');
 
@@ -62,6 +61,7 @@ fetch(BOUNDARIES.NATURAL_EARTH).then(response => response.json()).then(json => {
     const workaround = {
       'Northern Cyprus': 'CY',
       'France': 'FR',
+      'Kosovo': 'XK',
       'Norway': 'NO',
       'Somaliland': 'SO'
     };
