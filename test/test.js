@@ -1,17 +1,12 @@
 /* globals before, describe, it */
 
 import { expect } from 'chai';
-import * as fetch from 'node-fetch';
 import * as fs from 'fs';
 
-import * as parser from '../js/parser';
+import * as parser from '../js/parser.mjs';
 
-async function getQuest(name, java) {
-  const version = java ?
-    '255be8f3294479eee2de30f1639f7a5a37a3f888' : // StreetComplete 9.0 was the last version with quests written in Java
-    'ab3e230713d798ff28779403ba8d9c0d70662cf8'; // StreetComplete 17.0 (February 2020) is used for all Kotlin files
-  const ext = java ? 'java' : 'kt';
-  return await fetch(`https://raw.githubusercontent.com/westnordost/StreetComplete/${version}/app/src/main/java/de/westnordost/streetcomplete/quests/${name}.${ext}`).then(response => response.text());
+async function getQuest(name, version) {
+  return await fetch(`https://raw.githubusercontent.com/streetcomplete/StreetComplete/${version}/app/src/main/java/de/westnordost/streetcomplete/quests/${name}`).then(response => response.text());
 }
 
 describe('parser', () => {
@@ -59,10 +54,10 @@ describe('parser', () => {
   });
 
   describe('#streetcomplete()', () => {
-    describe('#streetcomplete(java, true)', () => {
+    describe('#streetcomplete(java, v9.0)', () => {
       let quest;
       before(async () => {
-        quest = await getQuest('housenumber/AddHousenumber', true);
+        quest = await getQuest('housenumber/AddHousenumber.java', 'v9.0'); // StreetComplete 9.0 was the last version with quests written in Java
       });
 
       it('should return the expected input when parsing a Java file', () => {
@@ -71,14 +66,26 @@ describe('parser', () => {
       });
     });
 
-    describe('#streetcomplete(kotlin, false)', () => {
+    describe('#streetcomplete(kotlin, v17.0)', () => {
       let quest;
       before(async () => {
-        quest = await getQuest('housenumber/AddHousenumber', false);
+        quest = await getQuest('housenumber/AddHousenumber.kt', 'v17.0'); // StreetComplete 17.0 (February 2020) is used for all Kotlin files
       });
 
       it('should return the expected input when parsing a Kotlin file', () => {
-        const expected = fs.readFileSync('./test/results/streetcomplete/housenumber/kotlin.txt', 'utf-8');
+        const expected = fs.readFileSync('./test/results/streetcomplete/housenumber/kotlin-v17.txt', 'utf-8');
+        expect(parser.streetcomplete(quest, false)).to.deep.equal(expected);
+      });
+    });
+
+    describe('#streetcomplete(kotlin, v50.0)', () => {
+      let quest;
+      before(async () => {
+        quest = await getQuest('address/AddHousenumber.kt', 'v50.0');
+      });
+
+      it('should return the expected input when parsing a Kotlin file', () => {
+        const expected = fs.readFileSync('./test/results/streetcomplete/housenumber/kotlin-v50.txt', 'utf-8');
         expect(parser.streetcomplete(quest, false)).to.deep.equal(expected);
       });
     });

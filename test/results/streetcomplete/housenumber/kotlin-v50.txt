@@ -1,0 +1,9 @@
+all except
+LU,
+LV,
+NL,
+DK,
+NO,
+CZ,
+IT,
+FR,
