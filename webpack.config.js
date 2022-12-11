@@ -2,18 +2,16 @@ const path = require('path');
 
 module.exports = {
   mode: 'production',
-  watch: true,
   entry: './js/main.mjs',
   output: {
-    path: path.resolve(__dirname, 'dist'),
     filename: 'js/[name].min.js',
     chunkFilename: 'js/[name].min.js',
     publicPath: 'dist/'
   },
   devServer: {
-    contentBase: __dirname,
-    watchContentBase: true,
-    publicPath: '/dist/',
+    static: {
+      directory: path.resolve(__dirname)
+    },
     compress: true,
     port: 8000
   },
@@ -21,7 +19,7 @@ module.exports = {
     rules: [
       {
         test: /\.txt$/i,
-        use: 'raw-loader'
+        type: 'asset/source'
       },
       {
         test: /\.geojson$/i,
