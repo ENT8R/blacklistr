@@ -1,7 +1,7 @@
 /* globals CodeMirror */
-import * as Map from './map';
-import * as Parser from './parser';
-import * as Settings from './settings';
+import * as Map from './map.mjs';
+import * as Parser from './parser.mjs';
+import * as Settings from './settings.mjs';
 
 let COUNTRY_CODES = [];
 
@@ -98,7 +98,7 @@ function text(input) {
   } else if (streetcomplete) {
     let url = streetcomplete;
     if (!isUrl(streetcomplete)) {
-      const QUEST_DIRECTORY = 'https://raw.githubusercontent.com/westnordost/StreetComplete/master/app/src/main/java/de/westnordost/streetcomplete/quests/';
+      const QUEST_DIRECTORY = 'https://raw.githubusercontent.com/streetcomplete/StreetComplete/master/app/src/main/java/de/westnordost/streetcomplete/quests/';
       url = QUEST_DIRECTORY + streetcomplete;
     }
 

@@ -1,6 +1,6 @@
 /* globals L */
-import * as Buttons from './buttons';
-import { MODE } from './parser';
+import * as Buttons from './buttons.mjs';
+import { MODE } from './parser.mjs';
 
 let map, layer;
 
