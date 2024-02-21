@@ -7,8 +7,8 @@
     "build": "npx webpack",
     "generate": "node assets/boundaries/generate.js",
     "lint": "npx eslint js/**.mjs",
-    "mocha": "npx mochapack --webpack-config webpack.config.test.js",
-    "test": "npm run lint && npm run mocha"
+    "mocha": "npx instant-mocha test/test.js",
+    "test": "npm run mocha"
   },
   "dependencies": {
     "codemirror": "^5.65.16",
@@ -20,8 +20,8 @@
     "@xmldom/xmldom": "^0.8.10",
     "chai": "^5.1.0",
     "eslint": "^8.56.0",
+    "instant-mocha": "^1.5.2",
     "mocha": "^10.3.0",
-    "mochapack": "^2.1.4",
     "osmtogeojson": "^3.0.0-beta.5",
     "webpack": "^5.90.3",
     "webpack-cli": "^5.1.4",
