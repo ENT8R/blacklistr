@@ -5,6 +5,7 @@
   "scripts": {
     "start": "npx webpack serve",
     "build": "npx webpack",
+    "generate": "node assets/boundaries/generate.js",
     "lint": "npx eslint js/**.mjs",
     "mocha": "npx mochapack --webpack-config webpack.config.test.js",
     "test": "npm run lint && npm run mocha"

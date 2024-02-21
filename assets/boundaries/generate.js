@@ -1,7 +1,8 @@
 const fs = require('fs');
+const path = require('path');
 const countryCoder = require('@ideditor/country-coder');
 const osmtogeojson = require('osmtogeojson');
-const { DOMParser } = require('xmldom');
+const { DOMParser } = require('@xmldom/xmldom');
 
 const BOUNDARIES = {
   JOSM: 'https://josm.openstreetmap.de/export/HEAD/josm/trunk/resources/data/boundaries.osm',
@@ -44,7 +45,7 @@ fetch(BOUNDARIES.JOSM).then(response => response.text()).then(text => {
     }
   });
 
-  fs.writeFileSync('josm.geojson', JSON.stringify(geojson), 'utf-8');
+  fs.writeFileSync(path.join(__dirname, 'josm.geojson'), JSON.stringify(geojson), 'utf-8');
 });
 
 fetch(BOUNDARIES.NATURAL_EARTH).then(response => response.json()).then(json => {
@@ -71,7 +72,7 @@ fetch(BOUNDARIES.NATURAL_EARTH).then(response => response.json()).then(json => {
     }
   });
 
-  fs.writeFileSync('naturalearth.geojson', JSON.stringify(json), 'utf-8');
+  fs.writeFileSync(path.join(__dirname, 'naturalearth.geojson'), JSON.stringify(json), 'utf-8');
 });
 
 fetch(BOUNDARIES.GEO_MAPS).then(response => response.json()).then(json => {
@@ -83,5 +84,5 @@ fetch(BOUNDARIES.GEO_MAPS).then(response => response.json()).then(json => {
     };
   });
 
-  fs.writeFileSync('geomaps.geojson', JSON.stringify(json), 'utf-8');
+  fs.writeFileSync(path.join(__dirname, 'geomaps.geojson'), JSON.stringify(json), 'utf-8');
 });
