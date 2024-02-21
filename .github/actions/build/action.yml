@@ -1,0 +1,12 @@
+name: Build
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Install Node.js and setup npm cache
+      uses: ./.github/actions/node-and-npm-cache
+    - name: Install and Build
+      run: |
+        npm ci
+        npm run build
+      shell: bash
