@@ -18,7 +18,7 @@ const BRING_TO_BACK = [
 
 fetch(BOUNDARIES.JOSM).then(response => response.text()).then(text => {
   const geojson = osmtogeojson(
-    new DOMParser().parseFromString(text)
+    new DOMParser().parseFromString(text, 'application/xml')
   );
 
   geojson.features.forEach((feature, index) => {
