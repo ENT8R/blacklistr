@@ -1,24 +1,28 @@
-/* globals CodeMirror */
+import { EditorView, basicSetup } from 'codemirror';
+import { javascript } from '@codemirror/lang-javascript';
+import { oneDark } from '@codemirror/theme-one-dark';
+
 import * as Map from './map.mjs';
 import * as Parser from './parser.mjs';
 import * as Settings from './settings.mjs';
 
 let COUNTRY_CODES = [];
 
-const editor = CodeMirror(document.getElementById('codemirror-container'), {
-  placeholder: 'Input all country codes seperated by a comma or line break (comments are allowed too)',
-  mode: 'javascript',
-  theme: 'material',
-  autofocus: true,
-  lineNumbers: true,
-  lineWrapping: true,
-  smartIndent: false
-});
-
-editor.on('change', () => {
-  const content = editor.getValue();
-  Settings.set('content', content);
-  update();
+const editor = new EditorView({
+  extensions: [
+    basicSetup,
+    EditorView.lineWrapping,
+    oneDark,
+    javascript(),
+    EditorView.updateListener.of(v => {
+      if (v.docChanged) {
+        const content = editor.state.doc.toString();
+        Settings.set('content', content);
+        update();
+      }
+    })
+  ],
+  parent: document.getElementById('codemirror-container')
 });
 
 document.getElementById('map').addEventListener('change-boundaries', () => {
@@ -45,7 +49,7 @@ function codes() {
 }
 
 function update() {
-  const input = Parser.parse(editor.getValue());
+  const input = Parser.parse(editor.state.doc.toString());
   input.toString();
   Map.update(input);
   text(input);
@@ -70,16 +74,26 @@ function text(input) {
   document.getElementById('country-list').innerHTML = text;
 }
 
+function setValueOfEditor(value) {
+  editor.dispatch({
+    changes: {
+      from: 0,
+      to: editor.state.doc.length,
+      insert: value
+    }
+  });
+}
+
 (async function() {
   Map.setup(code => {
-    const input = Parser.parse(editor.getValue());
+    const input = Parser.parse(editor.state.doc.toString());
     const index = input.countries.indexOf(code);
     if (index > -1) {
       input.countries.splice(index, 1);
     } else {
       input.countries.push(code);
     }
-    editor.setValue(Parser.stringify(input));
+    setValueOfEditor(Parser.stringify(input));
   });
 
   Settings.setup();
@@ -92,9 +106,9 @@ function text(input) {
   const streetcomplete = url.searchParams.get('streetcomplete');
 
   if (data) {
-    editor.setValue(data);
+    setValueOfEditor(data);
   } else if (file) {
-    editor.setValue(await fetch(file).then(response => response.text()));
+    setValueOfEditor(await fetch(file).then(response => response.text()));
   } else if (streetcomplete) {
     let url = streetcomplete;
     if (!isUrl(streetcomplete)) {
@@ -106,12 +120,12 @@ function text(input) {
 
     const ext = url.split('.').pop();
     if (ext === 'java') {
-      editor.setValue(Parser.streetcomplete(content, true));
+      setValueOfEditor(Parser.streetcomplete(content, true));
     } else if (ext === 'kt') {
-      editor.setValue(Parser.streetcomplete(content, false));
+      setValueOfEditor(Parser.streetcomplete(content, false));
     }
   } else {
-    editor.setValue(Settings.get('content'));
+    setValueOfEditor(Settings.get('content'));
   }
 })();
 
@@ -131,5 +145,4 @@ function toggle() {
     Map.showControl();
   }
   Map.resize();
-  editor.refresh();
 }

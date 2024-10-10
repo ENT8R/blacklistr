@@ -12,7 +12,7 @@
   <meta http-equiv="Content-Security-Policy"
         content="default-src 'self';
                  script-src 'self' https://unpkg.com;
-                 style-src 'self' https://unpkg.com;
+                 style-src 'self' 'unsafe-inline' https://unpkg.com;
                  img-src 'self' https://*.global.ssl.fastly.net data:;
                  connect-src *;">
 
@@ -21,15 +21,6 @@
   <link rel="stylesheet"
         href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H"
-        crossorigin="anonymous">
-
-  <link rel="stylesheet"
-        href="https://unpkg.com/codemirror@5.65.16/lib/codemirror.css"
-        integrity="sha384-bsaAhvdduZPAwUb7RRLRvDgtEtOsggrgjkr/EjPO1i/vdoi+DmdLaG79UOt6M5hD"
-        crossorigin="anonymous">
-  <link rel="stylesheet"
-        href="https://unpkg.com/codemirror@5.65.16/theme/material.css"
-        integrity="sha384-ftVWQjQhEzkqErV5eVzStm3sI6m7GdcKRcg8QwhBjMY5u62CduosO64VWHzgAVCt"
         crossorigin="anonymous">
 
   <link rel="stylesheet" href="css/main.css">
@@ -85,13 +76,6 @@
           crossorigin="anonymous"></script>
   <script src="https://unpkg.com/leaflet-image@0.4.0/leaflet-image.js"
           integrity="sha384-Cl2KSaehTGkoEiw07k3L/nCCwvF6tB3BcWgb83eHZUp2oPDI3qSKJUypvhoB66Gq"
-          crossorigin="anonymous"></script>
-
-  <script src="https://unpkg.com/codemirror@5.65.16/lib/codemirror.js"
-          integrity="sha384-/WlgLpnUCi+5eS6SnLPKTwRY0l8X4TxBIroMKS0KpFjlFoST+ZbSMKqTpgS24m8i"
-          crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/codemirror@5.65.16/mode/javascript/javascript.js"
-          integrity="sha384-UEBcG5Bts/NmkO8UcF+Jq5qLb7Z1SVsz66bvds73oF8/I6p33YGu3l9bgAs27nNj"
           crossorigin="anonymous"></script>
 
   <script src="dist/js/main.min.js"></script>
