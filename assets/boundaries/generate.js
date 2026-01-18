@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const countryCoder = require('@ideditor/country-coder');
+const countryCoder = require('@rapideditor/country-coder');
 const osmtogeojson = require('osmtogeojson');
 const { DOMParser } = require('@xmldom/xmldom');
 
