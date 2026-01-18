@@ -98,7 +98,7 @@ function text(input) {
   } else if (streetcomplete) {
     let url = streetcomplete;
     if (!isUrl(streetcomplete)) {
-      const QUEST_DIRECTORY = 'https://raw.githubusercontent.com/streetcomplete/StreetComplete/master/app/src/main/java/de/westnordost/streetcomplete/quests/';
+      const QUEST_DIRECTORY = 'https://raw.githubusercontent.com/streetcomplete/StreetComplete/master/app/src/androidMain/kotlin/de/westnordost/streetcomplete/quests/';
       url = QUEST_DIRECTORY + streetcomplete;
     }
 

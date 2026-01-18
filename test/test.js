@@ -5,8 +5,16 @@ import * as fs from 'fs';
 
 import * as parser from '../js/parser.mjs';
 
-async function getQuest(name, version) {
-  return await fetch(`https://raw.githubusercontent.com/streetcomplete/StreetComplete/${version}/app/src/main/java/de/westnordost/streetcomplete/quests/${name}`).then(response => response.text());
+async function getQuest(name, version, kmp) {
+  let url = `https://raw.githubusercontent.com/streetcomplete/StreetComplete/${version}/app/src/main/java/de/westnordost/streetcomplete/quests/${name}`;
+  if (kmp) {
+    url = `https://raw.githubusercontent.com/streetcomplete/StreetComplete/${version}/app/src/androidMain/kotlin/de/westnordost/streetcomplete/quests/${name}`;
+  }
+  return await fetch(url).then(response => response.text());
+}
+
+async function getKMPQuest(name, version) {
+  return await getQuest(name, version, true);
 }
 
 describe('parser', () => {
@@ -78,14 +86,38 @@ describe('parser', () => {
       });
     });
 
-    describe('#streetcomplete(kotlin, v50.0)', () => {
+    describe('#streetcomplete(kotlin, v61.1)', () => {
       let quest;
       before(async () => {
-        quest = await getQuest('address/AddHousenumber.kt', 'v50.0');
+        quest = await getQuest('address/AddHousenumber.kt', 'v61.1'); // StreetComplete 61.1 (May 2025) is the last version to not use the Kotlin Multiplatform setup
       });
 
       it('should return the expected input when parsing a Kotlin file', () => {
-        const expected = fs.readFileSync('./test/results/streetcomplete/housenumber/kotlin-v50.txt', 'utf-8');
+        const expected = fs.readFileSync('./test/results/streetcomplete/housenumber/kotlin-v61.1.txt', 'utf-8');
+        expect(parser.streetcomplete(quest, false)).to.deep.equal(expected);
+      });
+    });
+
+    describe('#streetcomplete(kotlin, v61.2)', () => {
+      let quest;
+      before(async () => {
+        quest = await getKMPQuest('address/AddHousenumber.kt', 'v61.2'); // StreetComplete 61.2 (July 2025) is the first version to use Kotlin Multiplatform
+      });
+
+      it('should return the expected input when parsing a Kotlin file', () => {
+        const expected = fs.readFileSync('./test/results/streetcomplete/housenumber/kotlin-v61.2.txt', 'utf-8');
+        expect(parser.streetcomplete(quest, false)).to.deep.equal(expected);
+      });
+    });
+
+    describe('#streetcomplete(kotlin, latest)', () => {
+      let quest;
+      before(async () => {
+        quest = await getKMPQuest('address/AddHousenumber.kt', 'master');
+      });
+
+      it('should return the expected input when parsing a Kotlin file', () => {
+        const expected = fs.readFileSync('./test/results/streetcomplete/housenumber/kotlin-latest.txt', 'utf-8');
         expect(parser.streetcomplete(quest, false)).to.deep.equal(expected);
       });
     });
